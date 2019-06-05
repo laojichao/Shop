@@ -24,8 +24,8 @@
             android:orientation="vertical">
 
             <TextView
-                style="@style/TabButton"
-                android:drawableTop="@drawable/main"
+                style="@style/AppBottomMainTvStyle"
+                android:drawableTop="@drawable/app_main_bottom_icon_home_select"
                 android:text="@string/menu_first" />
         </LinearLayout>
 
@@ -37,8 +37,8 @@
             android:orientation="vertical">
 
             <TextView
-                style="@style/TabButton"
-                android:drawableTop="@drawable/fenlei"
+                style="@style/AppBottomMainTvStyle"
+                android:drawableTop="@drawable/app_main_bottom_icon_classify_select"
                 android:text="@string/menu_second" />
         </LinearLayout>
 
@@ -50,8 +50,8 @@
             android:orientation="vertical">
 
             <TextView
-                style="@style/TabButton"
-                android:drawableTop="@drawable/cart"
+                style="@style/AppBottomMainTvStyle"
+                android:drawableTop="@drawable/app_main_bottom_icon_cart_select"
                 android:text="@string/menu_third" />
         </LinearLayout>
 
@@ -63,8 +63,8 @@
             android:orientation="vertical">
 
             <TextView
-                style="@style/TabButton"
-                android:drawableTop="@drawable/my"
+                style="@style/AppBottomMainTvStyle"
+                android:drawableTop="@drawable/app_main_bottom_icon_mine_select"
                 android:text="@string/menu_four" />
         </LinearLayout>
 

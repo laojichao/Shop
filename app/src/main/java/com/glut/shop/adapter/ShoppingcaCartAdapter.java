@@ -3,6 +3,7 @@ package com.glut.shop.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.glut.shop.R;
 import com.glut.shop.bean.ShoppingBean;
 import com.glut.shop.bean.UpdataButton;
+import com.glut.shop.util.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -28,6 +30,7 @@ import java.util.List;
  * @date 2019/5/30
  */
 public class ShoppingcaCartAdapter extends RecyclerView.Adapter<ShoppingcaCartAdapter.MyShoppViewHolder> {
+    private static final String TAG = "ShoppingcaCartAdapter";
     private Context mContext;
     private View headerView;
     private List<ShoppingBean.DataBean.ListBean> mDatas;
@@ -154,11 +157,12 @@ public class ShoppingcaCartAdapter extends RecyclerView.Adapter<ShoppingcaCartAd
         });
 
         holder.itemView.setTag(mDatas.get(position));//传object回去
-
+        //视图点击监听器
         holder.parenttView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ToastUtils.showToast(mContext, position + "被点击中了");
+                Log.d(TAG, "onClick: ");
             }
         });
 

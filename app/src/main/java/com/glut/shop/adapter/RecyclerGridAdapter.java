@@ -55,7 +55,7 @@ public class RecyclerGridAdapter extends RecyclerView.Adapter<ViewHolder> implem
             @Override
             public void onClick(View v) {
                 if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(v, position);
+
                 }
             }
         });

@@ -12,22 +12,30 @@ import android.widget.Toast;
 
 import com.glut.shop.R;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 
 public class StoreActivity extends ActivityGroup implements OnClickListener {
     private static final String TAG = "DepartmentStoreActivity";
+    @Bind(R.id.ll_container)
+    LinearLayout ll_container;
+    @Bind(R.id.ll_first)
+    LinearLayout ll_first;
+    @Bind(R.id.ll_second)
+    LinearLayout ll_second;
+    @Bind(R.id.ll_third)
+    LinearLayout ll_third;
+    @Bind(R.id.ll_four)
+    LinearLayout ll_four;
     private Bundle mBundle = new Bundle(); // 声明一个包裹对象
-    private LinearLayout ll_container, ll_first, ll_second, ll_third, ll_four;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store);
+        ButterKnife.bind(this);
         // 从布局文件中获取名叫ll_container的线性布局，用于存放内容视图
-        ll_container = findViewById(R.id.ll_container);
-        ll_first = findViewById(R.id.ll_first); // 获取第一个标签的线性布局
-        ll_second = findViewById(R.id.ll_second); // 获取第二个标签的线性布局
-        ll_third = findViewById(R.id.ll_third); // 获取第三个标签的线性布局
-        ll_four = findViewById(R.id.ll_four);
         ll_first.setOnClickListener(this); // 给第一个标签注册点击监听器
         ll_second.setOnClickListener(this); // 给第二个标签注册点击监听器
         ll_third.setOnClickListener(this); // 给第三个标签注册点击监听器

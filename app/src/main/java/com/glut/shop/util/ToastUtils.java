@@ -15,13 +15,14 @@ public class ToastUtils {
      * 显示Toast
      */
     public static void showToast(Context context, CharSequence text) {
-        if(mToast == null) {
-            mToast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-        } else {
-            mToast.setText(text);
-            mToast.setDuration(Toast.LENGTH_SHORT);
-        }
-        mToast.show();
+//        if(mToast == null) {
+//            mToast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+//        } else {
+//            mToast.setText(text);
+//            mToast.setDuration(Toast.LENGTH_SHORT);
+//        }
+//        mToast.show();
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
 }

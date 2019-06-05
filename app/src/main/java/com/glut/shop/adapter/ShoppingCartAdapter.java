@@ -34,6 +34,7 @@ import java.util.List;
  * 购物车适配器
  */
 public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapter.MyViewHolder> implements View.OnClickListener {
+    private static final String TAG ="ShoppingCartAdapter";
     private Context context;
     private List<ShoppingBean.DataBean> data;
     public ShoppingcaCartAdapter mShopCartAdapter;
