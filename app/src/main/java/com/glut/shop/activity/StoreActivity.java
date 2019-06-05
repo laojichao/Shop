@@ -12,21 +12,21 @@ import android.widget.Toast;
 
 import com.glut.shop.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
 public class StoreActivity extends ActivityGroup implements OnClickListener {
     private static final String TAG = "DepartmentStoreActivity";
-    @Bind(R.id.ll_container)
+    @BindView(R.id.ll_container)
     LinearLayout ll_container;
-    @Bind(R.id.ll_first)
+    @BindView(R.id.ll_first)
     LinearLayout ll_first;
-    @Bind(R.id.ll_second)
+    @BindView(R.id.ll_second)
     LinearLayout ll_second;
-    @Bind(R.id.ll_third)
+    @BindView(R.id.ll_third)
     LinearLayout ll_third;
-    @Bind(R.id.ll_four)
+    @BindView(R.id.ll_four)
     LinearLayout ll_four;
     private Bundle mBundle = new Bundle(); // 声明一个包裹对象
 

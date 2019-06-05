@@ -30,7 +30,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.IOException;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -40,25 +41,26 @@ public class CartActivity extends AppCompatActivity implements
         ShoppingCartAdapter.OnRecyclerViewItemClickListener,
         View.OnClickListener, ShoppingCartAdapter.OndeleteidClickListener {
     private static final String TAG = "CartActivity";
-    @Bind(R.id.bock_return)
+    
+    @BindView(R.id.bock_return)
     ImageView mBock_return;     //返回
-    @Bind(R.id.relat_mygoods)
+    @BindView(R.id.relat_mygoods)
     RelativeLayout relatMygoods;
-    @Bind(R.id.rlv_shopcart)
+    @BindView(R.id.rlv_shopcart)
     RecyclerView rlvShopCart;       //循环视图
-    @Bind(R.id.rl_shopcart_have)
+    @BindView(R.id.rl_shopcart_have)
     RelativeLayout rlShopcartHave;
-    @Bind(R.id.tv_shopcart_addselect)
+    @BindView(R.id.tv_shopcart_addselect)
     CheckBox tvShopCartSelect;      //全选
-    @Bind(R.id.tv_shopcart_totalprice)
+    @BindView(R.id.tv_shopcart_totalprice)
     TextView tvShopCartTotalPrice;  //总价
-    @Bind(R.id.tv_shopcart_totalnum)
+    @BindView(R.id.tv_shopcart_totalnum)
     TextView tvShopcartTotalnum;
-    @Bind(R.id.tv_shopcart_submit)
+    @BindView(R.id.tv_shopcart_submit)
     TextView tvShopCartSubmit;      //提交结算
-    @Bind(R.id.ll_pay)
+    @BindView(R.id.ll_pay)
     LinearLayout llPay;
-    @Bind(R.id.emtryview)
+    @BindView(R.id.emtryview)
     View emtryview;
     private ShoppingBean shopCartBeans;
     private List<ShoppingBean.DataBean> data;

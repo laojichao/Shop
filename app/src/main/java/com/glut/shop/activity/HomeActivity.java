@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -46,17 +46,17 @@ public class HomeActivity extends AppCompatActivity {
     private final static String TAG = "HomeActivity";
     private List<HomeBean> data;
     private int height;
-    @Bind(R.id.app_home_list)
+    @BindView(R.id.app_home_list)
     RecyclerView mRecyclerView;
-    @Bind(R.id.fake_status_bar)
+    @BindView(R.id.fake_status_bar)
     View fakeStatusBar;
-    @Bind(R.id.app_home_title_ll_news)
+    @BindView(R.id.app_home_title_ll_news)
     LinearLayout appHomeTitleLlNews;
-    @Bind(R.id.app_home_title_tv_news)
+    @BindView(R.id.app_home_title_tv_news)
     AppCompatTextView appHomeTitleTvNews;
-    @Bind(R.id.app_home_title_ll_search)
+    @BindView(R.id.app_home_title_ll_search)
     LinearLayout appHomeTitleLlSearch;
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     LinearLayout mToolbar;
     private String jsonData = null;
     private String bannerData = null;

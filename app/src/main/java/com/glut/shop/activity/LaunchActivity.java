@@ -12,14 +12,14 @@ import com.bumptech.glide.Glide;
 import com.glut.shop.R;
 import com.glut.shop.util.PermissionUtil;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
 public class LaunchActivity extends AppCompatActivity {
     private static final String TAG = "LaunchActivity";
-    @Bind(R.id.iv_background)
+    @BindView(R.id.iv_background)
     ImageView iv_background;
 
     @Override
