@@ -9,7 +9,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-
+/**
+ * Created by ouyangshen on 2018/1/28.
+ */
 public class PermissionUtil {
     private final static String TAG = "PermissionUtil";
 

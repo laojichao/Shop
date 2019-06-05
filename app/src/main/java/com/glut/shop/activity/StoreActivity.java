@@ -3,10 +3,12 @@ package com.glut.shop.activity;
 import android.app.ActivityGroup;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.glut.shop.R;
 
@@ -76,5 +78,26 @@ public class StoreActivity extends ActivityGroup implements OnClickListener {
         // 把活动页面的顶层视图（即内容视图）添加到内容框架上
         ll_container.addView(v);
     }
+
+    /**
+     * 退出应用
+     */
+    private long clickTime = 0; //记录第一次点击的时间
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if ((System.currentTimeMillis() - clickTime) > 2000) {
+                Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                clickTime = System.currentTimeMillis();
+            } else {
+                this.finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 
 }

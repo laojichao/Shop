@@ -1,160 +1,216 @@
 package com.glut.shop.activity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
-import android.widget.LinearLayout.LayoutParams;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.glut.shop.R;
-import com.glut.shop.adapter.RecyclerCombineAdapter;
-import com.glut.shop.adapter.RecyclerGridAdapter;
-import com.glut.shop.bean.GoodsInfo;
-import com.glut.shop.constant.ImageList;
-import com.glut.shop.util.DateUtil;
-import com.glut.shop.util.MenuUtil;
-import com.glut.shop.util.Utils;
-import com.glut.shop.widget.BannerPager;
-import com.glut.shop.widget.SpacesItemDecoration;
+import com.glut.shop.adapter.HomeAdapter;
+import com.glut.shop.bean.BannerBean;
+import com.glut.shop.bean.CategoryBean;
+import com.glut.shop.bean.CategoryBean.DataBean;
+import com.glut.shop.bean.CategoryBean.DataBean.DataListBean;
+import com.glut.shop.bean.HomeBean;
+import com.glut.shop.http.OkHttpEngine;
+import com.glut.shop.util.GlideImageLoader;
+import com.glut.shop.util.ToastUtils;
+import com.glut.shop.widget.MarqueeView;
+import com.google.gson.Gson;
+import com.youth.banner.Banner;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 
 @SuppressLint("DefaultLocale")
-public class HomeActivity extends AppCompatActivity implements BannerPager.BannerClickListener {
+public class HomeActivity extends AppCompatActivity {
     private final static String TAG = "HomeActivity";
+    private List<HomeBean> data;
+    private int height;
+    @Bind(R.id.app_home_list)
+    RecyclerView mRecyclerView;
+    @Bind(R.id.fake_status_bar)
+    View fakeStatusBar;
+    @Bind(R.id.app_home_title_ll_news)
+    LinearLayout appHomeTitleLlNews;
+    @Bind(R.id.app_home_title_tv_news)
+    AppCompatTextView appHomeTitleTvNews;
+    @Bind(R.id.app_home_title_ll_search)
+    LinearLayout appHomeTitleLlSearch;
+    @Bind(R.id.toolbar)
+    LinearLayout mToolbar;
+    private String jsonData = null;
+    private String bannerData = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        // 从布局文件中获取名叫tl_head的工具栏
-        Toolbar tl_head = findViewById(R.id.tl_head);
-        // 设置工具栏的标题文字
-        tl_head.setTitle("商城首页");
-        // 使用tl_head替换系统自带的ActionBar
-        setSupportActionBar(tl_head);
-        initBanner(); // 初始化广告轮播条
-        initGrid(); // 初始化市场网格列表
-        initCombine(); // 初始化猜你喜欢的商品展示网格
+        ButterKnife.bind(this);
     }
 
-    private void initBanner() {
-        // 从布局文件中获取名叫banner_pager的横幅轮播条
-        BannerPager banner = findViewById(R.id.banner_pager);
-        // 获取横幅轮播条的布局参数
-        LayoutParams params = (LayoutParams) banner.getLayoutParams();
-        params.height = (int) (Utils.getScreenWidth(this) * 250f / 640f);
-        // 设置横幅轮播条的布局参数
-        banner.setLayoutParams(params);
-        // 设置横幅轮播条的广告图片队列
-        banner.setImage(ImageList.getDefault());
-        // 设置横幅轮播条的广告点击监听器
-        banner.setOnBannerListener(this);
-        // 开始广告图片的轮播滚动
-        banner.start();
+    @Override
+    protected void onResume() {
+        super.onResume();
+                getJsonData();
+                getBannerData();
+                //延时处理
+        try {
+            Thread.sleep(300);
+            initView();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    // 一旦点击了广告图，就回调监听器的onBannerClick方法
-    public void onBannerClick(int position) {
-        String desc = String.format("您点击了第%d张图片", position + 1);
-        Toast.makeText(this, desc, Toast.LENGTH_LONG).show();
-    }
-
-    private void initGrid() {
-        // 从布局文件中获取名叫rv_grid的循环视图
-        RecyclerView rv_grid = findViewById(R.id.rv_grid);
-        // 创建一个垂直方向的网格布局管理器
-        GridLayoutManager manager = new GridLayoutManager(this, 5);
-        // 设置循环视图的布局管理器
-        rv_grid.setLayoutManager(manager);
-        // 构建一个市场列表的网格适配器
-        RecyclerGridAdapter adapter = new RecyclerGridAdapter(this, GoodsInfo.getDefaultGrid());
-        // 设置网格列表的点击监听器
-        adapter.setOnItemClickListener(adapter);
-        // 设置网格列表的长按监听器
-        adapter.setOnItemLongClickListener(adapter);
-        // 给rv_grid设置市场网格适配器
-        rv_grid.setAdapter(adapter);
-        // 设置rv_grid的默认动画效果
-        rv_grid.setItemAnimator(new DefaultItemAnimator());
-        // 给rv_grid添加列表项之间的空白装饰
-        rv_grid.addItemDecoration(new SpacesItemDecoration(1));
-    }
-
-    private void initCombine() {
-        // 从布局文件中获取名叫rv_combine的循环视图
-        RecyclerView rv_combine = findViewById(R.id.rv_combine);
-        // 创建一个四列的网格布局管理器
-        GridLayoutManager manager = new GridLayoutManager(this, 4);
-        // 设置网格布局管理器的占位规则
-        // 以下占位规则的意思是：第一项和第二项占两列，其它项占一列；
-        // 如果网格的列数为四，那么第一项和第二项平分第一行，第二行开始每行有四项。
-        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+    /*
+    * 获取循环视图数据
+    * */
+    private void getJsonData() {
+        String URL = "http://120.24.61.225:8080/atguigu/json/category.json";
+        OkHttpEngine.getInstance(getApplicationContext()).getAsynHttp(URL, new Callback() {
             @Override
-            public int getSpanSize(int position) {
-                if (position == 0 || position == 1) { // 为第一项或者第二项
-                    return 2; // 占据两列
-                } else { // 为其它项
-                    return 1; // 占据一列
+            public void onFailure(Call call, IOException e) {
+                ToastUtils.showToast(getApplicationContext(), "网络获取失败");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                jsonData = response.body().string();
+//                Log.d(TAG, jsonData);
+            }
+        });
+    }
+
+    /*
+    * 初始化页面视图
+    * */
+    private void initView() {
+        //网格流循环视图适配器
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 6);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
+        CategoryBean categoryBean = new Gson().fromJson(jsonData, CategoryBean.class);
+        List<DataBean> dataBeans = categoryBean.getData();
+        List<DataListBean> dataListBeans = new ArrayList<>();
+        for (int i = 0; i< dataBeans.size(); i++) {
+            for (int j = 0; j < dataBeans.get(i).getDataList().size() ; j++){
+                dataListBeans.add(dataBeans.get(i).getDataList().get(j));
+            }
+        }
+//        String jsonData = new String(getAssertsFile(getApplicationContext(), "content.json"));
+//        data = new Gson().fromJson(jsonData, new TypeToken<List<HomeBean>>() {
+//        }.getType());
+        HomeAdapter adapter = new HomeAdapter();
+        adapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
+                //根据类型设置占位规则共6列
+//                int type = data.get(position).getType();
+//                if (type == 1 || type == 2 || type == 3 || type == 5 || type == 6) {
+//                    return 6 ;
+//                } else if (type == 4) {
+//                    return 2;
+//                } else if (type == 7) {
+//                    return 3;
+//                }
+//                return 0;
+                return 3;
+            }
+        });
+        mRecyclerView.setAdapter(adapter);
+        adapter.setHeaderView(getHeaderView(mRecyclerView));
+        adapter.setNewData(dataListBeans);
+        //设置滚动监听器
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            private int totalDy = 0;
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                totalDy += dy;
+                if (totalDy <= height) {
+                    float alpha = (float) totalDy / height;
+                    //设置透明Toolbar
+                    mToolbar.setBackgroundColor(ColorUtils.blendARGB(Color.TRANSPARENT
+                            , ContextCompat.getColor(getApplicationContext(), R.color.white), alpha));
+                } else {
+                    mToolbar.setBackgroundColor(ColorUtils.blendARGB(Color.TRANSPARENT
+                            , ContextCompat.getColor(getApplicationContext(), R.color.white), 1));
                 }
             }
         });
-        // 设置循环视图的布局管理器
-        rv_combine.setLayoutManager(manager);
-        // 构建一个猜你喜欢的网格适配器
-        RecyclerCombineAdapter adapter = new RecyclerCombineAdapter(this, GoodsInfo.getDefaultCombine());
-        // 设置网格列表的点击监听器
-        adapter.setOnItemClickListener(adapter);
-        // 设置网格列表的长按监听器
-        adapter.setOnItemLongClickListener(adapter);
-        // 给rv_combine设置猜你喜欢网格适配器
-        rv_combine.setAdapter(adapter);
-        // 设置rv_combine的默认动画效果
-        rv_combine.setItemAnimator(new DefaultItemAnimator());
-        // 给rv_combine添加列表项之间的空白装饰
-        rv_combine.addItemDecoration(new SpacesItemDecoration(1));
     }
 
-    @Override
-    public boolean onMenuOpened(int featureId, Menu menu) {
-        // 显示菜单项左侧的图标
-        MenuUtil.setOverflowIconVisible(featureId, menu);
-        return super.onMenuOpened(featureId, menu);
+    /*
+    * 获取轮播图
+    * */
+    private void getBannerData() {
+        String URL = "http://120.24.61.225:8080/atguigu/json/banner.json";
+        OkHttpEngine.getInstance(getApplicationContext()).getAsynHttp(URL, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d(TAG, "onFailure: ");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                bannerData = response.body().string();
+//                Log.d(TAG, bannerData);
+            }
+        });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // 从menu_home.xml中构建菜单界面布局
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) { // 点击了工具栏左边的返回箭头
-            finish();
-        } else if (id == R.id.menu_search) { // 点击了搜索图标
-            // 跳转到搜索页面
-            Intent intent = new Intent(this, SearchViewActivity.class);
-            intent.putExtra("collapse", false);
-            startActivity(intent);
-        } else if (id == R.id.menu_refresh) { // 点击了刷新图标
-            Toast.makeText(this, "当前刷新时间: " +
-                    DateUtil.getNowDateTime("yyyy-MM-dd HH:mm:ss"), Toast.LENGTH_LONG).show();
-            return true;
-        } else if (id == R.id.menu_about) { // 点击了关于菜单项
-            Toast.makeText(this, "这个是商城首页", Toast.LENGTH_LONG).show();
-            return true;
-        } else if (id == R.id.menu_quit) { // 点击了退出菜单项
-            finish();
+    /*
+    * 设置头部轮播图
+    * */
+    private View getHeaderView(RecyclerView v) {
+        BannerBean bannerBean = new Gson().fromJson(bannerData, BannerBean.class);
+        List<BannerBean.DataBean> list = bannerBean.getData();
+        List<String> bannerImg = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            bannerImg.add(list.get(i).getImg());
         }
-        return super.onOptionsItemSelected(item);
+        //构建头部
+        View convertView = LayoutInflater
+                .from(getApplicationContext())
+                .inflate(R.layout.app_include_home_header, (ViewGroup) v.getParent(), false);
+        Banner mBanner = convertView.findViewById(R.id.app_home_header_banner);
+        mBanner.setImages(bannerImg)
+                .setImageLoader(new GlideImageLoader())     //图片加载
+                .setDelayTime(5000)     //设置自动轮播延迟
+                .start();
+        //自定义轮播组件，轮播文本文字
+        MarqueeView marqueeView = convertView.findViewById(R.id.app_home_header_problem);
+
+        List<String> problems=new ArrayList<>();
+        problems.add("如何获取更多个人积分");
+        problems.add("下单时服务费率规则");
+        problems.add("大额预定商品详细交易流程");
+        marqueeView.startWithList(problems);
+
+        ViewGroup.LayoutParams bannerParams = mBanner.getLayoutParams();
+        int resourceId = getApplicationContext().getResources().getIdentifier("status_bar_height", "dimen", "android");
+        int statusBarHeight = getApplicationContext().getResources().getDimensionPixelSize(resourceId);
+        height = bannerParams.height - statusBarHeight - 104;
+
+        return convertView;
     }
 }

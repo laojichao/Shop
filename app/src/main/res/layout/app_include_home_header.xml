@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:orientation="vertical">
+
+    <com.youth.banner.Banner
+        android:id="@+id/app_home_header_banner"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/app_home_header_banner"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="-30dp"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/app_home_header_cover" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/AppHomeHeaderTvMenuStyle"
+                    android:drawableTop="@mipmap/app_home_header_hot_sale"
+                    android:text="超市" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/AppHomeHeaderTvMenuStyle"
+                    android:drawableTop="@mipmap/app_home_header_hot_sale"
+                    android:text="数码电器" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/AppHomeHeaderTvMenuStyle"
+                    android:drawableTop="@mipmap/app_home_header_hot_sale"
+                    android:text="时尚服饰" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/AppHomeHeaderTvMenuStyle"
+                    android:drawableTop="@mipmap/app_home_header_hot_sale"
+                    android:text="排行榜" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:paddingTop="10dp">
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/AppHomeHeaderTvMenuStyle"
+                    android:drawableTop="@mipmap/app_home_header_hot_sale"
+                    android:text="充值中心" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/AppHomeHeaderTvMenuStyle"
+                    android:drawableTop="@mipmap/app_home_header_hot_sale"
+                    android:text="领劵" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/AppHomeHeaderTvMenuStyle"
+                    android:drawableTop="@mipmap/app_home_header_hot_sale"
+                    android:text="周边美食" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/AppHomeHeaderTvMenuStyle"
+                    android:drawableTop="@mipmap/app_home_header_hot_sale"
+                    android:text="每日签到" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="13dp"
+                android:layout_marginRight="13dp"
+                android:background="@drawable/app_bg_main_title_search"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!--自定义文本轮播组件-->
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="13dp"
+                    android:paddingRight="13dp"
+                    android:paddingTop="10dp"
+                    android:text="常见问题"
+                    android:textColor="@color/app_color_tv_def"
+                    android:textSize="18sp" />
+
+                <com.glut.shop.widget.MarqueeView
+                    android:id="@+id/app_home_header_problem"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    app:mvAnimDuration="1000"
+                    app:mvInterval="3000"
+                    app:mvSingleLine="true"
+                    app:mvTextColor="@color/app_color_main_title_tv"
+                    app:mvTextSize="14sp"
+                    app:paddingStart="0dp" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="13dp"
+                    android:paddingRight="13dp"
+                    android:paddingTop="10dp"
+                    android:text="更多"
+                    android:textColor="@color/app_color_main_title_tv"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+</RelativeLayout>

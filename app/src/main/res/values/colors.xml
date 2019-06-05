@@ -18,4 +18,37 @@
     <color name="blue_black">#1673b8</color>
     <color name="tab_text_selected">#0084e8</color>
     <color name="tab_text_normal">#7597b3</color>
+
+    <color name="light_gray">#efefef</color>
+    <color name="gray">#e7e4e4</color>
+    <color name="deep_gray">#afaeae</color>
+    <color name="deep_gray_2">#636262</color>
+    <color name="light_white">#e2e1e1</color>
+    <color name="light_black">#fd383838</color>
+
+    <color name="common_bg">#fcfcfc</color>
+    <color name="background_color">#f6f6f6</color>
+    <color name="main_red_text">#e53e42</color>
+    <color name="splitline_color">#dddddd</color>
+    <color name="black_look_text">#333333</color>
+    <color name="commom_background">#f3f3f3</color>
+    <color name="btn_register_pressed">#00acff</color>
+
+    <!--应用的主要色调，actionBar默认使用该颜色，Toolbar导航栏的底色-->
+    <!--主题色-->
+    <color name="app_theme_color">#e01222</color>
+    <!--标题栏标题颜色-->
+    <color name="title_color">#FFFFFF</color>
+    <!--window背景色-->
+    <color name="window_background">#fff</color>
+    <!--底部导航栏未选中文字颜色-->
+    <color name="app_color_main_tab_item_unchecked">#4d4d56</color>
+    <!--主页搜索文字颜色-->
+    <color name="app_color_main_title_tv">#999999</color>
+    <!--首页item主文字颜色-->
+    <color name="app_color_home_item_tv_main">#222222</color>
+    <!--首页item副文字颜色-->
+    <color name="app_color_home_item_tv_subtitle">#555555</color>
+    <!--默认主题文字颜色-->
+    <color name="app_color_tv_def">#222222</color>
 </resources>

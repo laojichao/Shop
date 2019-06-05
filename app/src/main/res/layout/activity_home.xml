@@ -1,60 +1,15 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="#f2f2f2">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/tl_head"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/app_home_list"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/blue_light"
-        app:navigationIcon="@drawable/ic_back" />
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0dp" />
-
-            <com.glut.shop.widget.BannerPager
-                android:id="@+id/banner_pager"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_grid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="3dp" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:descendantFocusability="blocksDescendants">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_combine"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </RelativeLayout>
-
-        </LinearLayout>
-    </ScrollView>
-
-</LinearLayout>
+    <include layout="@layout/app_include_home_title" />
+</FrameLayout>
