@@ -49,14 +49,7 @@
                 android:paddingTop="10dp"
                 android:text="穿秋装情侣字母徽章风衣" />
 
-            <TextView
-                android:id="@+id/tv_shopping_rmb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="¥185"
-                android:textColor="@color/main_red_text"
-                android:textSize="15sp" />
+
 
 
             <RelativeLayout
@@ -65,16 +58,25 @@
                 android:layout_marginBottom="10dp">
 
                 <TextView
-                    android:id="@+id/tv_goods_points"
+                    android:id="@+id/tv_shopping_rmb"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/butt_style_points"
-                    android:padding="5dp"
-                    android:paddingRight="5dp"
-                    android:text="0积分"
-                    android:textColor="#95D4FB" />
+                    android:paddingLeft="10dp"
+                    android:text="¥185"
+                    android:textColor="@color/main_red_text"
+                    android:textSize="15sp" />
+
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_goods_points"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="10dp"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:background="@drawable/butt_style_points"-->
+                    <!--android:padding="5dp"-->
+                    <!--android:paddingRight="5dp"-->
+                    <!--android:text="0积分"-->
+                    <!--android:textColor="#95D4FB" />-->
 
                 <!--数量-->
                 <LinearLayout

@@ -29,8 +29,8 @@ import java.util.List;
  * @author lao
  * @date 2019/5/30
  */
-public class ShoppingcaCartAdapter extends RecyclerView.Adapter<ShoppingcaCartAdapter.MyShoppViewHolder> {
-    private static final String TAG = "ShoppingcaCartAdapter";
+public class ShoppingItemCartAdapter extends RecyclerView.Adapter<ShoppingItemCartAdapter.MyShoppViewHolder> {
+    private static final String TAG = "ShoppingItemCartAdapter";
     private Context mContext;
     private View headerView;
     private List<ShoppingBean.DataBean.ListBean> mDatas;
@@ -39,25 +39,25 @@ public class ShoppingcaCartAdapter extends RecyclerView.Adapter<ShoppingcaCartAd
     private LayoutInflater inflater;
     private OnRecyclerViewItemClickListener onItemClickListener;
     ShoppingBean.DataBean bean;
-    ShoppingCartAdapter shoppingCartAdapter;
+    ShoppingCartAdapter rv_ShopCartAdapter;
 
-    public ShoppingcaCartAdapter(Context context, List<ShoppingBean.DataBean.ListBean> jsonArray, ShoppingBean.DataBean bean, ShoppingCartAdapter mallShopCartAdapter2) {
+    public ShoppingItemCartAdapter(Context context, List<ShoppingBean.DataBean.ListBean> jsonArray, ShoppingBean.DataBean bean, ShoppingCartAdapter shopCartAdapter) {
         this.mContext = context;
         this.mDatas = jsonArray;
         this.bean = bean;
-        this.shoppingCartAdapter = mallShopCartAdapter2;
+        this.rv_ShopCartAdapter = shopCartAdapter;
         inflater = LayoutInflater.from(mContext);
     }
 
     @Override
-    public ShoppingcaCartAdapter.MyShoppViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ShoppingItemCartAdapter.MyShoppViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         view = LayoutInflater.from(mContext).inflate(R.layout.item_shopcartview, parent, false);
-        return new ShoppingcaCartAdapter.MyShoppViewHolder(view);
+        return new ShoppingItemCartAdapter.MyShoppViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ShoppingcaCartAdapter.MyShoppViewHolder holder, final int position) {
+    public void onBindViewHolder(final ShoppingItemCartAdapter.MyShoppViewHolder holder, final int position) {
         String goods_name = mDatas.get(position).getGoods_name(); //商品名称
         String goods_image = mDatas.get(position).getGoods_image();  //图片
         int goods_num = mDatas.get(position).getGoods_num(); //数量
@@ -78,9 +78,9 @@ public class ShoppingcaCartAdapter extends RecyclerView.Adapter<ShoppingcaCartAd
         }
 
         holder.tvShopCartClothPrice.setText(goods_price + "");
-        if (!TextUtils.isEmpty(goods_points)) {
-            holder.GoodsPoints.setText(goods_points + "积分");
-        }
+//        if (!TextUtils.isEmpty(goods_points)) {
+//            holder.GoodsPoints.setText(goods_points + "积分");
+//        }
 
 
         /**
@@ -95,7 +95,7 @@ public class ShoppingcaCartAdapter extends RecyclerView.Adapter<ShoppingcaCartAd
                         mOnEditClickListener.onEditClick(position, mDatas.get(position).getUser_id(), count);
                     }
                     mDatas.get(position).setGoods_num(count);
-                    EventBus.getDefault().post(new UpdataButton(shoppingCartAdapter.getAllPrice()));
+                    EventBus.getDefault().post(new UpdataButton(rv_ShopCartAdapter.getAllPrice()));
                     notifyDataSetChanged();
                 }
             }
@@ -112,7 +112,7 @@ public class ShoppingcaCartAdapter extends RecyclerView.Adapter<ShoppingcaCartAd
                     mOnEditClickListener.onEditClick(position, mDatas.get(position).getUser_id(), count);
                 }
                 mDatas.get(position).setGoods_num(count);
-                EventBus.getDefault().post(new UpdataButton(shoppingCartAdapter.getAllPrice()));
+                EventBus.getDefault().post(new UpdataButton(rv_ShopCartAdapter.getAllPrice()));
                 notifyDataSetChanged();
             }
         });
@@ -147,12 +147,12 @@ public class ShoppingcaCartAdapter extends RecyclerView.Adapter<ShoppingcaCartAd
                 }
                 if (!noSelect) {
                     bean.setSelect(!noSelect);
-                    shoppingCartAdapter.notifyDataSetChanged();
+                    rv_ShopCartAdapter.notifyDataSetChanged();
                 } else {
                     bean.setSelect(!noSelect);
-                    shoppingCartAdapter.notifyDataSetChanged();
+                    rv_ShopCartAdapter.notifyDataSetChanged();
                 }
-                EventBus.getDefault().post(new UpdataButton(shoppingCartAdapter.getAllPrice()));
+                EventBus.getDefault().post(new UpdataButton(rv_ShopCartAdapter.getAllPrice()));
             }
         });
 
@@ -194,21 +194,21 @@ public class ShoppingcaCartAdapter extends RecyclerView.Adapter<ShoppingcaCartAd
         private TextView ivShopCartClothAdd;
         private ImageView ivShopCartClothDelete;
         private ImageView ivShopCartClothPic;
-        private TextView GoodsPoints;
+//        private TextView GoodsPoints;
         private LinearLayout parenttView;
 
         public MyShoppViewHolder(View view) {
             super(view);
-            tvShopCartClothName = (TextView) view.findViewById(R.id.tv_item_shopcart_clothname); //商品名称
-            tvShopCartClothPrice = (TextView) view.findViewById(R.id.tv_shopping_rmb); //价格
-            etShopCartClothNum = (TextView) view.findViewById(R.id.et_item_shopcart_cloth_num); //商品数量
-            ivShopCartClothSel = (CheckBox) view.findViewById(R.id.tv_item_shopcart_clothselect); //商品是否选中
-            ivShopCartClothMinus = (TextView) view.findViewById(R.id.iv_item_shopcart_cloth_minus); //减号
-            ivShopCartClothAdd = (TextView) view.findViewById(R.id.iv_item_shopcart_cloth_add); //加号
-            ivShopCartClothPic = (ImageView) view.findViewById(R.id.iv_item_shopcart_cloth_pic); //图片
-            ivShopCartClothDelete = (ImageView) view.findViewById(R.id.iv_item_shopcart_cloth_delete);//商品删除
-            GoodsPoints = (TextView) view.findViewById(R.id.tv_goods_points);
-            parenttView = (LinearLayout) view.findViewById(R.id.ll_parenttView);
+            tvShopCartClothName = view.findViewById(R.id.tv_item_shopcart_clothname); //商品名称
+            tvShopCartClothPrice = view.findViewById(R.id.tv_shopping_rmb); //价格
+            etShopCartClothNum = view.findViewById(R.id.et_item_shopcart_cloth_num); //商品数量
+            ivShopCartClothSel = view.findViewById(R.id.tv_item_shopcart_clothselect); //商品是否选中
+            ivShopCartClothMinus = view.findViewById(R.id.iv_item_shopcart_cloth_minus); //减号
+            ivShopCartClothAdd = view.findViewById(R.id.iv_item_shopcart_cloth_add); //加号
+            ivShopCartClothPic = view.findViewById(R.id.iv_item_shopcart_cloth_pic); //图片
+            ivShopCartClothDelete = view.findViewById(R.id.iv_item_shopcart_cloth_delete);//商品删除
+//            GoodsPoints = view.findViewById(R.id.tv_goods_points);
+            parenttView = view.findViewById(R.id.ll_parenttView);
         }
     }
 

@@ -37,7 +37,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
     private static final String TAG ="ShoppingCartAdapter";
     private Context context;
     private List<ShoppingBean.DataBean> data;
-    public ShoppingcaCartAdapter mShopCartAdapter;
+    public ShoppingItemCartAdapter mShopCartAdapter;
     private OnRecyclerViewItemClickListener  onItemClickListener;
     private  OndeleteidClickListener ondeleteidClickListener;
     private List<String> mList;
@@ -49,9 +49,10 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
     @Override
     public ShoppingCartAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
+        //根据布局构建视图
         View view = LayoutInflater.from(context).inflate(R.layout.item_shopcart, parent, false);
-        MyViewHolder holder= new MyViewHolder(view);
+        MyViewHolder holder = new MyViewHolder(view);
+        //每个子项的点击监听
         view.setOnClickListener(this);
         return holder;
     }
@@ -66,16 +67,16 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
         //删除
         holder.tvShopCartdefault.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 String deleteID = getDeleteID(cartBean);
                 if (ondeleteidClickListener!=null){
                     if (mList.size()==0){
-
                         Toast.makeText(context,"请选择需要删除的商品",Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    ondeleteidClickListener.onIdClick(v,deleteID);
+                    ondeleteidClickListener.onIdClick(v, deleteID);
                 }
             }
         });
@@ -106,7 +107,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         };
         List<ShoppingBean.DataBean.ListBean> listBeanList = data.get(position).getList();
         //这里是初始化商品item的recyclerView,将外层实例传入子层以便刷新
-        mShopCartAdapter = new ShoppingcaCartAdapter(context, cartBean.getList(), cartBean, this);
+        mShopCartAdapter = new ShoppingItemCartAdapter(context, cartBean.getList(), cartBean, this);
         holder.recyChariView.setLayoutManager(linearLayoutManager);
 
         holder.recyChariView.setAdapter(mShopCartAdapter);
@@ -141,7 +142,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
     //设置全选/全不选
     public void setAllselect(boolean b){
-        for(int i=0;i<data.size();i++){
+        for(int i = 0;i < data.size(); i++){
             data.get(i).setSelect(b);
             for (ShoppingBean.DataBean.ListBean cartItemResultDtoList : data.get(i).getList()){
                 cartItemResultDtoList.setSelect(b);
@@ -157,14 +158,14 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
      * @return
      */
     public String getSelectTitle(){
-        StringBuffer stringBuffer=new StringBuffer();
-        if(data!=null){
-            for (int i=0;i<data.size();i++){
-                List<ShoppingBean.DataBean.ListBean> mdata=data.get(i).getList();
-                for (int y=0;y<mdata.size();y++){
+        StringBuffer stringBuffer = new StringBuffer();
+        if(data != null){
+            for (int i = 0;i < data.size(); i++){
+                List<ShoppingBean.DataBean.ListBean> mdata = data.get(i).getList();
+                for (int y = 0;y < mdata.size(); y++){
                     if(mdata.get(y).isSelect()){
                         stringBuffer.append(mdata.get(y).getGoods_name());
-                        if(y<mdata.size()-1){
+                        if(y<mdata.size() - 1){
                             stringBuffer.append(",");
                         }
                     }
@@ -182,24 +183,22 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         this.data=mDatas;
     }
     public List<ShoppingBean.DataBean> getData(){
-
         return data;
-
     }
 
     //获取需要商品总价格
     public String getAllPrice(){
-        BigDecimal allprice =new  BigDecimal("0");
-        if(data!=null){
-            for (int i=0;i<data.size();i++){
-                List<ShoppingBean.DataBean.ListBean> mdata=data.get(i).getList();
-                for (int y=0;y<mdata.size();y++){
+        BigDecimal allprice = new  BigDecimal("0");
+        if(data != null){
+            for (int i = 0;i < data.size(); i++){
+                List<ShoppingBean.DataBean.ListBean> mdata = data.get(i).getList();
+                for (int y = 0;y < mdata.size(); y++){
                     if(mdata.get(y).isSelect()){
-                        Log.i("单价", "getAllPrice: ----->"+mdata.get(y).getGoods_price()); //价格
+                        Log.i("单价", "getAllPrice: ----->" + mdata.get(y).getGoods_price()); //价格
                         BigDecimal interestRate = new BigDecimal(mdata.get(y).getGoods_num()); //数量
                         double interest = Arith.mul(mdata.get(y).getGoods_price(), interestRate);
                         allprice=allprice.add(BigDecimal.valueOf(interest));
-                        Log.i("总价", allprice+"allprice"+interest+"interestRate"+interestRate); //价格
+                        Log.i("总价", allprice+"allprice" + interest + "interestRate" + interestRate); //价格
                     }
                 }
             }
@@ -209,14 +208,14 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
     //获取需要删除的商品id
     public String getDeleteProductID(){
-        StringBuffer stringBuffer=new StringBuffer();
+        StringBuffer stringBuffer = new StringBuffer();
         if(data!=null){
-            for (int i=0;i<data.size();i++){
-                List<ShoppingBean.DataBean.ListBean> mdata=data.get(i).getList();
-                for (int y=0;y<mdata.size();y++){
+            for (int i = 0;i < data.size(); i++){
+                List<ShoppingBean.DataBean.ListBean> mdata = data.get(i).getList();
+                for (int y = 0;y < mdata.size(); y++){
                     if(mdata.get(y).isSelect()){
                         stringBuffer.append(mdata.get(y).getGoods_id());
-                        if(y<mdata.size()-1){
+                        if(y<mdata.size() - 1){
                             stringBuffer.append(",");
                         }
                     }
@@ -228,16 +227,16 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
     //获取需要删除的商品id
     public String getDeleteID(ShoppingBean.DataBean cartBean ){
-        StringBuffer stringBuffer= new StringBuffer();
+        StringBuffer stringBuffer = new StringBuffer();
         mList = new ArrayList<>();
-        if (cartBean!=null){
+        if (cartBean != null){
             int size = cartBean.getList().size();
             mList.clear();
-            for (int i = 0; i <size ; i++) {
+            for (int i = 0; i < size; i++) {
                 if (cartBean.getList().get(i).isSelect()){
                     stringBuffer.append(cartBean.getList().get(i).getGoods_id());
                     mList.add(cartBean.getList().get(i).getGoods_id());
-                    if(i<size-1){
+                    if(i < size - 1){
                         stringBuffer.append(",");
                     }
                 }
@@ -259,11 +258,11 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
         public MyViewHolder(View view) {
             super(view);
-            llShopCartHeader = (LinearLayout) view.findViewById(R.id.ll_shopcart_header); //商店头部
-            ivShopCartShopSel = (CheckBox) view.findViewById(R.id.iv_item_shopcart_shopselect); //商店是否选中
-            tvShopCartShopName = (TextView) view.findViewById(R.id.tv_item_shopcart_shopname); //商店名称
-            tvShopCartdefault = (TextView) view.findViewById(R.id.tv_default);//商店删除
-            recyChariView = (RecyclerView) view.findViewById(R.id.recy_view);
+            llShopCartHeader = view.findViewById(R.id.ll_shopcart_header); //商店头部
+            ivShopCartShopSel = view.findViewById(R.id.iv_item_shopcart_shopselect); //商店是否选中
+            tvShopCartShopName = view.findViewById(R.id.tv_item_shopcart_shopname); //商店名称
+            tvShopCartdefault = view.findViewById(R.id.tv_default);//商店删除
+            recyChariView = view.findViewById(R.id.recy_view);
 
         }
     }
