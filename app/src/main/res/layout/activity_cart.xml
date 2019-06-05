@@ -6,14 +6,14 @@
 
     <!---->
     <RelativeLayout
-        android:id="@+id/relat_mygoods"
+        android:id="@+id/rl_mygoods"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="10dp">
 
         <!--返回-->
         <ImageView
-            android:id="@+id/bock_return"
+            android:id="@+id/iv_return"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_centerVertical="true"
@@ -47,7 +47,7 @@
 
             <!--循环视图放商品项-->
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/rlv_shopcart"
+                android:id="@+id/rv_shopcart"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
@@ -60,16 +60,17 @@
         android:id="@+id/ll_pay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/emtryview"
+        android:layout_above="@+id/empty_view"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <!--全选按钮-->
         <CheckBox
-            android:id="@+id/tv_shopcart_addselect"
-            android:layout_width="wrap_content"
+            android:id="@+id/cb_shopcart_allselect"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:layout_marginLeft="10dp"
             android:button="@null"
             android:drawableLeft="@drawable/common_check_selector"
@@ -92,7 +93,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="合计:"
                     android:textColor="#191819" />
@@ -120,7 +121,7 @@
 
         </LinearLayout>
 
-        <!--文本框结算按钮-->
+        <!--文本框提交按钮-->
         <TextView
             android:id="@+id/tv_shopcart_submit"
             android:layout_width="wrap_content"
@@ -131,14 +132,14 @@
             android:paddingLeft="30dp"
             android:paddingRight="30dp"
             android:paddingTop="10dp"
-            android:text="去结算"
+            android:text="提交订单"
             android:textColor="@color/white" />
 
     </LinearLayout>
 
     <!--空的视图-->
     <View
-        android:id="@+id/emtryview"
+        android:id="@+id/empty_view"
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:layout_alignParentBottom="true" />
