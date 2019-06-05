@@ -8,37 +8,51 @@
         android:id="@+id/tl_head"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/blue_light"
-        app:navigationIcon="@drawable/ic_back">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tab_title"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                app:tabGravity="center"
-                app:tabIndicatorColor="@color/red"
-                app:tabIndicatorHeight="2dp"
-                app:tabMode="scrollable"
-                app:tabSelectedTextColor="@color/red"
-                app:tabTextColor="@color/grey"
-                app:tabTextAppearance="@style/TabText" />
-
-        </RelativeLayout>
+        android:background="@color/light_gray"
+        app:navigationIcon="@mipmap/ic_back">
     </android.support.v7.widget.Toolbar>
 
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vp_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <ListView
+            android:id="@+id/lv_category"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ListView
+                    android:id="@+id/lv_category_product"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_product_title"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:gravity="center"
+                android:background="@color/white"
+                android:text="@string/app_name"
+                android:textColor="@color/orange"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

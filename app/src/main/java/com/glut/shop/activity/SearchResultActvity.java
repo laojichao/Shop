@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.glut.shop.R;
 
 /**
- * Created by ouyangshen on 2017/10/21.
+ *
  */
 @SuppressLint("SetTextI18n")
 public class SearchResultActvity extends AppCompatActivity {

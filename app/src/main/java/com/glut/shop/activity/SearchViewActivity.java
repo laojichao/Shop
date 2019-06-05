@@ -25,7 +25,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 /**
- * Created by ouyangshen on 2017/10/21.
+ *
  */
 @SuppressLint("SetTextI18n")
 public class SearchViewActivity extends AppCompatActivity {
