@@ -2,8 +2,6 @@ package com.glut.shop.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.INotificationSideChannel;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -11,16 +9,14 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.glut.shop.R;
-import com.glut.shop.activity.CartActivity;
+import com.glut.shop.activity.ProductInfoActivity;
 import com.glut.shop.bean.CategoryBean;
 import com.glut.shop.util.ToastUtils;
 import com.glut.shop.widget.GridViewForScrollView;
-import com.glut.shop.widget.MarqueeView;
 
 import java.util.List;
 
 public class CategoryProductAdapter extends BaseAdapter {
-    private static final String TAG = "CategoryProductAdapter";
 
     private Context context;
     private List<CategoryBean.DataBean> datas;
@@ -68,8 +64,9 @@ public class CategoryProductAdapter extends BaseAdapter {
         viewHolder.gridView.setAdapter(adapter);
         viewHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ToastUtils.showToast(context, "点击" + dataList.get(position).getTitle());
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                ToastUtils.showToast(context,"点击" + dataList.get(position).getId());
+                context.startActivity(new Intent(context, ProductInfoActivity.class));
             }
         });
         return view;

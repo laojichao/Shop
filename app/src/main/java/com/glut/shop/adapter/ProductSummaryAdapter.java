@@ -2,6 +2,8 @@ package com.glut.shop.adapter;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -16,7 +18,7 @@ import com.glut.shop.util.ToastUtils;
 import java.util.List;
 
 public class ProductSummaryAdapter extends BaseAdapter {
-
+    private static final String TAG = "ProductSummaryAdapter";
     private Context context;
     private List<CategoryBean.DataBean.DataListBean> datas;
 
@@ -46,10 +48,12 @@ public class ProductSummaryAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
+        Log.d(TAG, "getView: position" + position);
         CategoryBean.DataBean.DataListBean subcategory = datas.get(position);
         ViewHolder viewHolder = null;
         if (viewHolder == null) {
-            view = View.inflate(context, R.layout.product_summary, null);
+            // 根据布局文件item_list.xml生成转换视图对象
+            view = LayoutInflater.from(context).inflate(R.layout.product_summary, null);
             viewHolder = new ViewHolder();
             viewHolder.tv_name = (TextView)view.findViewById(R.id.tv_summary_name);
             viewHolder.iv_icon = (SimpleDraweeView)view.findViewById(R.id.sdview_product_summary);
@@ -60,6 +64,7 @@ public class ProductSummaryAdapter extends BaseAdapter {
         viewHolder.tv_name.setText(subcategory.getTitle());
         Uri uri = Uri.parse(subcategory.getImgURL());
         viewHolder.iv_icon.setImageURI(uri);
+        Log.d(TAG, "getView: position结束" + position);
         return view;
     }
 
