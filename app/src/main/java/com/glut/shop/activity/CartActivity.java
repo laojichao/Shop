@@ -7,19 +7,27 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.glut.shop.R;
 import com.glut.shop.adapter.ShoppingCartAdapter;
+import com.glut.shop.adapter.ShoppingCartAdapter.OnRecyclerViewItemClickListener;
+import com.glut.shop.adapter.ShoppingCartAdapter.OndeleteidClickListener;
+import com.glut.shop.bean.CartInfo;
+import com.glut.shop.bean.GoodsInfo;
 import com.glut.shop.bean.ShoppingBean;
+import com.glut.shop.bean.ShoppingBean.DataBean;
 import com.glut.shop.bean.UpdataButton;
+import com.glut.shop.database.CartDBHelper;
 import com.glut.shop.http.OkHttpEngine;
-import com.glut.shop.util.CommomDialog;
+import com.glut.shop.widget.CommomDialog;
 import com.glut.shop.util.ToastUtils;
 import com.google.gson.Gson;
 
@@ -28,6 +36,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -38,10 +47,12 @@ import okhttp3.Response;
 /*
 * 
 * 购物车页面
+* 店铺点击监听器
+* 店铺删除监听器
+* 视图点击监听器
 * */
-public class CartActivity extends AppCompatActivity implements
-        ShoppingCartAdapter.OnRecyclerViewItemClickListener,
-        View.OnClickListener, ShoppingCartAdapter.OndeleteidClickListener {
+public class CartActivity extends AppCompatActivity implements OnRecyclerViewItemClickListener,
+        OnClickListener, OndeleteidClickListener {
     private static final String TAG = "CartActivity";
     
     @BindView(R.id.iv_return)
@@ -61,15 +72,17 @@ public class CartActivity extends AppCompatActivity implements
     @BindView(R.id.tv_shopcart_submit)
     TextView tv_shopcart_submit;      //提交结算
     @BindView(R.id.ll_pay)
-    LinearLayout llPay;
+    LinearLayout ll_pay;
     @BindView(R.id.empty_view)
     View empty_view;
     private ShoppingBean shopCartBeans;
-    private List<ShoppingBean.DataBean> data;
+    private List<DataBean> data;
     private ShoppingCartAdapter rv_ShopCartAdapter;
     boolean isSelect = false;
     private static final String URL = "http://120.24.61.225:8080/atguigu/json/shoppingcart.json";
     private String jsonData = null;
+    private CartDBHelper mHelper;
+    private List<CartInfo> info = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,13 +98,31 @@ public class CartActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        getShoppingCartData();
-        try {
-            Thread.sleep(300);
+        mHelper = CartDBHelper.getInstance(this, 1);
+        //打开数据库
+        mHelper.openWriteLink();
+//        getShoppingCartData();
+        info = mHelper.query("1=1");
+        if (info != null) {
+            initData();
+        }
+/*        try {
+            Thread.sleep(200);
+            if (jsonData != null) {
+                initData();
+            } else {
+                onResume();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-        initData();
+        }*/
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mHelper.closeLink();
     }
 
     private void initListener() {
@@ -103,7 +134,7 @@ public class CartActivity extends AppCompatActivity implements
         tv_shopcart_submit.setOnClickListener(this);
     }
 
-    //获取json数据,暂时获取不了
+    //获取json数据
     private void getShoppingCartData() {
         OkHttpEngine.getInstance(getApplicationContext()).getAsynHttp(URL, new Callback() {
             @Override
@@ -114,7 +145,7 @@ public class CartActivity extends AppCompatActivity implements
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 jsonData = response.body().string();
-                Log.d(TAG, jsonData);
+//                Log.d(TAG, jsonData);
             }
         });
     }
@@ -124,19 +155,47 @@ public class CartActivity extends AppCompatActivity implements
      * 设置数据
      */
     private void initData() {
-        //测试用的数据转换成实体类，赋值到adapter中
-        //网络中获取的json数据
-        //  String jsonData="{\"status\":true,\"msg\":\"\",\"data\":[{\"store_name\":\"天天商城\",\"user_id\":\"229\",\"store_id\":\"14828331510902860000\",\"list\":[{\"goods_price\":183,\"cart_id\":\"15232812841628050000\",\"user_id\":\"229\",\"member_id\":\"15222940696559300000\",\"goods_id\":\"15162475454444720000\",\"goods_num\":\"1\",\"goods_name\":\"飞科FC5901专业发廊理发器电推剪电动推子成人老人儿童剃头\",\"goods_image\":\"http://img.lion-mall.com/goods/20180118/dbff92fc8dee4e26c39b21ee207a18a8.jpg\",\"spec_desc\":\"\",\"spec1_name\":\"型号\",\"spec1_value\":\"FC5901(积分价)\",\"spec2_name\":\"\",\"spec2_value\":\"\",\"proportion_return\":\"50\",\"goods_points\":66,\"is_have_point\":\"1\",\"model_id\":\"15162475454434460000\"}]},{\"store_name\":\"本港海产\",\"user_id\":\"3096\",\"store_id\":\"15132364355633290000\",\"list\":[{\"goods_price\":33,\"cart_id\":\"15232812763901580000\",\"user_id\":\"3096\",\"member_id\":\"15222940696559300000\",\"goods_id\":\"15156635008014120000\",\"goods_num\":\"1\",\"goods_name\":\"本港海产 即食大片海苔原味辣味125g包邮\",\"goods_image\":\"http://img.lion-mall.com/goods/20180111/65aae13eb49e93939850c707dbf69966.jpg\",\"spec_desc\":\"\",\"spec1_name\":\"规格\",\"spec1_value\":\"1*125g(积分价)\",\"spec2_name\":\"\",\"spec2_value\":\"\",\"proportion_return\":\"50\",\"goods_points\":7,\"is_have_point\":\"1\",\"model_id\":\"15156635008003640000\"}]},{\"store_name\":\"智能生活屋\",\"user_id\":\"3090\",\"store_id\":\"15110923292896270000\",\"list\":[{\"goods_price\":98,\"cart_id\":\"15232812214585490000\",\"user_id\":\"3090\",\"member_id\":\"15222940696559300000\",\"goods_id\":\"15154810744781680000\",\"goods_num\":\"1\",\"goods_name\":\"杜酷（DUKU） 无线蓝牙键盘多屏双通道蓝牙键盘通用\",\"goods_image\":\"http://img.lion-mall.com/goods/20180109/8885a44d743b75ccb0f3601686ddb719.jpg\",\"spec_desc\":\"\",\"spec1_name\":\"颜色\",\"spec1_value\":\"金色(积分价)\",\"spec2_name\":\"\",\"spec2_value\":\"\",\"proportion_return\":\"50\",\"goods_points\":31,\"is_have_point\":\"1\",\"model_id\":\"15154810744751190000\"}]},{\"store_name\":\"聚美佳品\",\"user_id\":\"2985\",\"store_id\":\"15028511939255260000\",\"list\":[{\"goods_price\":48,\"cart_id\":\"15232475994654440000\",\"user_id\":\"2985\",\"member_id\":\"15222940696559300000\",\"goods_id\":\"15153090695659930000\",\"goods_num\":\"2\",\"goods_name\":\"卡通抱枕被子两用 多功能暖手汽车空调被三合一\",\"goods_image\":\"http://img.lion-mall.com/goods/20180107/568058f3aaf01cd0297b26d75c1ff85a.png\",\"spec_desc\":\"\",\"spec1_name\":\"颜色\",\"spec1_value\":\"可爱猫\",\"spec2_name\":\"\",\"spec2_value\":\"\",\"proportion_return\":\"50\",\"goods_points\":0,\"is_have_point\":\"1\",\"model_id\":\"15153090695654650000\"}]},{\"store_name\":\"羽森家纺\",\"user_id\":\"267\",\"store_id\":\"14830180850588560000\",\"list\":[{\"goods_price\":380,\"cart_id\":\"15232475900203700000\",\"user_id\":\"267\",\"member_id\":\"15222940696559300000\",\"goods_id\":\"15155019232807690000\",\"goods_num\":\"1\",\"goods_name\":\"羽森高档双层纱贡缎阳绒四件套\",\"goods_image\":\"http://img.lion-mall.com/goods/20180109/7de0db542473faf6659ed457dda87275.jpg\",\"spec_desc\":\"\",\"spec1_name\":\"颜色\",\"spec1_value\":\"蒙特城堡（香槟灰）\",\"spec2_name\":\"规格\",\"spec2_value\":\"200*230\",\"proportion_return\":\"50\",\"goods_points\":0,\"is_have_point\":\"1\",\"model_id\":\"15155019232792440000\"}]},{\"store_name\":\"戈勒世家\",\"user_id\":\"1098\",\"store_id\":\"14879242960201500000\",\"list\":[{\"goods_price\":67,\"cart_id\":\"15232475545649120000\",\"user_id\":\"1098\",\"member_id\":\"15222940696559300000\",\"goods_id\":\"15168503821784490000\",\"goods_num\":\"2\",\"goods_name\":\"男士特色独眼怪兽胸包单肩包斜挎包时尚户外休闲包潮流男包\",\"goods_image\":\"http://img.lion-mall.com/goods/20180125/a355d78946c721565d2e44687f15f934.jpg\",\"spec_desc\":\"\",\"spec1_name\":\"颜色\",\"spec1_value\":\"黑色(积分兑)\",\"spec2_name\":\"\",\"spec2_value\":\"\",\"proportion_return\":\"50\",\"goods_points\":12,\"is_have_point\":\"1\",\"model_id\":\"15168503821773910000\"},{\"goods_price\":82,\"cart_id\":\"15232475436635450000\",\"user_id\":\"1098\",\"member_id\":\"15222940696559300000\",\"goods_id\":\"15168478480459580000\",\"goods_num\":\"1\",\"goods_name\":\"男士手提包AD18单肩包斜挎皮包商务公文包手提包\",\"goods_image\":\"http://img.lion-mall.com/goods/20180125/31966da605420f672712bd07a36dcd4a.jpg\",\"spec_desc\":\"\",\"spec1_name\":\"颜色\",\"spec1_value\":\"黑色(积分兑)\",\"spec2_name\":\"\",\"spec2_value\":\"\",\"proportion_return\":\"50\",\"goods_points\":23,\"is_have_point\":\"1\",\"model_id\":\"15168478480445350000\"}]}]}";
-        Gson gson = new Gson();
-        shopCartBeans = gson.fromJson(jsonData, ShoppingBean.class);
-        data = null;
-        data = shopCartBeans.getData();
+//        Gson gson = new Gson();
+//        shopCartBeans = gson.fromJson(jsonData, ShoppingBean.class);
+//        data = null;
+//        data = shopCartBeans.getData();
+        List<DataBean> dataBeans = new ArrayList<>();            //店铺项列表
+        for (int i = 0; i < info.size(); i++) {
+            DataBean.ListBean listBean = new DataBean.ListBean();       //商品项
+            listBean.setGoods_name(info.get(i).getTitle());
+            listBean.setGoods_price(info.get(i).getPrice());
+            listBean.setGoods_num(info.get(i).getCount());
+            listBean.setGoods_image(info.get(i).getImage());
+            listBean.setGoods_id(info.get(i).getGoods_id());
+
+            List<DataBean.ListBean> listBeans = new ArrayList<>();      //商品项列表
+            DataBean dataBean = new DataBean();         //店铺
+
+            String name = info.get(i).getShop();        //获取当前店铺名字
+            dataBean.setStore_name(name);               //设置前项的店铺名
+            boolean isSame = false;
+            for (int j = 0; j < dataBeans.size(); j++) {
+                if (name.equals(dataBeans.get(j).getStore_name())) {
+                    //当遇到同名店铺，则添加到同名店铺之下
+                    dataBeans.get(j).getList().add(listBean);
+                    isSame = true;
+                    break;
+                }
+            }
+            if (!isSame) {
+                listBeans.add(listBean);        //每个商品项添加进商品列表
+                dataBean.setList(listBeans);        //商品列表添加进商店
+                dataBeans.add(dataBean);        //店铺添加进店铺列表
+            }
+
+        }
+        data = dataBeans;
         if (rv_ShopCartAdapter != null) {
-            rv_ShopCartAdapter.setmDatas(data);
+            rv_ShopCartAdapter.setDatas(data);
             //通知改变
             rv_ShopCartAdapter.notifyDataSetChanged();
         } else {
-            rv_ShopCartAdapter = new ShoppingCartAdapter(this, data);
+            rv_ShopCartAdapter = new ShoppingCartAdapter(this, data, mHelper);
             //设置垂直流循环视图
             rv_shopcart.setLayoutManager(new LinearLayoutManager(CartActivity.this, LinearLayoutManager.VERTICAL, false));
             rv_shopcart.setAdapter(rv_ShopCartAdapter);
@@ -147,7 +206,7 @@ public class CartActivity extends AppCompatActivity implements
 
     @Override
     public void onItemClick(View view, ShoppingBean.DataBean data) {
-        //对应项被点击
+        //对应项被点击,跳转商品详情页
         Log.d(TAG, "onItemClick: ");
         ToastUtils.showToast(getApplicationContext(), view.getId() + "被点击");
 
@@ -158,6 +217,7 @@ public class CartActivity extends AppCompatActivity implements
     public void messageEventBus(UpdataButton event) {
         //刷新UI
         tv_shopcart_totalprice.setText("￥" + event.getDiscribe());
+        tv_shopcart_totalnum.setText("商品数量" + event.getCount());
     }
 
     @Override
@@ -175,7 +235,6 @@ public class CartActivity extends AppCompatActivity implements
                 break;
             case R.id.cb_shopcart_allselect: //全选
                 if (isSelect) {
-                    Log.d(TAG, "onClick: " + isSelect);
                     cb_shopcart_allselect.setChecked(false);
                     isSelect = false;
                     //通知全选
@@ -192,22 +251,27 @@ public class CartActivity extends AppCompatActivity implements
                 break;
         }
     }
-
+ 
     /**
      * 删除的点击事件
      *
-     * @param view
-     * @param id
+     * @param view  视图
+     * @param list 要删除id的集合
      */
     @Override
-    public void onIdClick(View view, final String id) {
+    public void onIdClick(View view, final List<String> list) {
         //圆形的警告框
         new CommomDialog(CartActivity.this, R.style.dialog, "", new CommomDialog.OnCloseListener() {
             @Override
             public void onClick(Dialog dialog, boolean confirm) {
                 if (confirm) {
-                    Toast.makeText(CartActivity.this, id + "商品被删除了,调用删除接口删除掉该商品", Toast.LENGTH_SHORT).show();
+//                    mHelper.delete("");
+                    for (String id : list) {
+                        mHelper.delete(String.format("goods_id='%s'", id));
+                        ToastUtils.showToast(getApplicationContext(),  "商品被删除了");
+                    }
                     dialog.dismiss();
+                    onResume();
                 }
             }
         }).setTitle("你确定要删除吗？").show();

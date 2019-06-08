@@ -1,5 +1,6 @@
 package com.glut.shop.provider;
 
+import android.content.Intent;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.Log;
 import android.widget.Toast;
@@ -10,6 +11,7 @@ import com.chad.library.adapter.base.provider.BaseItemProvider;
 import com.glut.shop.bean.CategoryBean.DataBean.DataListBean;
 import com.glut.shop.R;
 import com.glut.shop.adapter.HomeAdapter;
+import com.glut.shop.util.ToastUtils;
 
 /**
  *
@@ -18,6 +20,7 @@ import com.glut.shop.adapter.HomeAdapter;
 
 public class TwoColumnItemProvider extends BaseItemProvider<DataListBean, BaseViewHolder> {
     private static final String TAG = "TwoColumnItemProvider";
+
     @Override
     public int viewType() {
         return HomeAdapter.TYPE_TWO_COLUMN;
@@ -41,8 +44,9 @@ public class TwoColumnItemProvider extends BaseItemProvider<DataListBean, BaseVi
 
     @Override
     public void onClick(BaseViewHolder helper, DataListBean data, int position) {
-        Log.d(TAG, "onClick: "  + position + 1);
-        position++;
-        Toast.makeText(mContext, "点击位置" + position, Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(mContext, DetailActivity.class);
+//        intent.putExtra("goood_id", data.getId());
+//        mContext.startActivity(intent);
+        ToastUtils.showToast(mContext, data.getDesc());
     }
 }

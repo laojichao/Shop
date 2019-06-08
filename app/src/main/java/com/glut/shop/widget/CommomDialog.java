@@ -1,4 +1,4 @@
-package com.glut.shop.util;
+package com.glut.shop.widget;
 
 import android.app.Dialog;
 import android.content.Context;

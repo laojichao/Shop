@@ -75,8 +75,12 @@ public class HomeActivity extends AppCompatActivity {
                 getBannerData();
                 //延时处理
         try {
-            Thread.sleep(300);
-            initView();
+            Thread.sleep(200);
+            if (jsonData != null && bannerData != null) {
+                initView();
+            } else {
+                onResume();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -90,7 +94,12 @@ public class HomeActivity extends AppCompatActivity {
         OkHttpEngine.getInstance(getApplicationContext()).getAsynHttp(URL, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                ToastUtils.showToast(getApplicationContext(), "网络获取失败");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtils.showToast(getApplicationContext(), "网络获取失败");
+                    }
+                });
             }
 
             @Override

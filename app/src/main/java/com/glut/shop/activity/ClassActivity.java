@@ -22,6 +22,7 @@ import com.glut.shop.adapter.CategoryProductAdapter;
 import com.glut.shop.http.OkHttpEngine;
 import com.glut.shop.util.DateUtil;
 import com.glut.shop.util.MenuUtil;
+import com.glut.shop.util.ToastUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -79,7 +80,6 @@ public class ClassActivity extends AppCompatActivity {
 
         categoryProductAdapter = new CategoryProductAdapter(this, categoryProList);
         lv_category_product.setAdapter(categoryProductAdapter);
-
         lv_category.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -87,6 +87,8 @@ public class ClassActivity extends AppCompatActivity {
                 categoryAdapter.notifyDataSetInvalidated();
                 tv_product_title.setText(categoryList.get(position));
                 lv_category_product.setSelection(showTitle.get(position));
+                ToastUtils.showToast(getApplicationContext(), "点击位置" + position);
+                Log.d("", "onItemClick: ");
             }
         });
 

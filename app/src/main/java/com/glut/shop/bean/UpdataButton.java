@@ -8,10 +8,17 @@ package com.glut.shop.bean;
 public class UpdataButton {
 
     private String discribe;
+    private String count;
 
-    public UpdataButton(String discribe) {
-        this.discribe = discribe;
+    public String getCount() {
+        return count;
     }
+
+    public void setCount(String count) {
+        this.count = count;
+    }
+
+    public UpdataButton() {}
 
     public String getDiscribe() {
         return discribe;

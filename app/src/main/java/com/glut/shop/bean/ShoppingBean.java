@@ -46,6 +46,7 @@ public class ShoppingBean implements Serializable {
         this.data = data;
     }
 
+    //商店名称
     public static class DataBean implements Serializable {
         /**
          * store_name : 泊爱电脑手机
@@ -113,6 +114,7 @@ public class ShoppingBean implements Serializable {
             this.list = list;
         }
 
+        //商品项
         public static class ListBean implements Serializable{
             /**
              * goods_price : 2798

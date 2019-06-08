@@ -37,7 +37,7 @@ public class LaunchActivity extends AppCompatActivity {
         boolean result = PermissionUtil.checkMultiPermission(LaunchActivity.this, permissions, 0);      //权限检查
         if (result == true) {
             iv_background.setEnabled(true);
-            mHandler.postDelayed(mLaunch, 1000);
+            mHandler.postDelayed(mLaunch, 2000);
         } else {
             Toast.makeText(this, "需要允许相应的权限才能开启应用", Toast.LENGTH_SHORT).show();
             finish();

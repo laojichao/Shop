@@ -45,4 +45,17 @@
             android:text="个人中心页面" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_web_path"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:textSize="17sp" />
+
+    <WebView
+        android:id="@+id/wv_assets_web"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </LinearLayout>

@@ -1,16 +1,20 @@
 package com.glut.shop.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.glut.shop.R;
+import com.glut.shop.activity.CartActivity;
+import com.glut.shop.util.ToastUtils;
 
 import java.util.List;
 
-public class CategoryAdapter extends BaseAdapter {
+public class CategoryAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 
     private Context context;
     private List<String> list;
@@ -65,6 +69,13 @@ public class CategoryAdapter extends BaseAdapter {
         }
         viewHolder.tv_name.setText(list.get(position));
         return view;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        ToastUtils.showToast(context, "点击位置" + position);
+        Intent intent = new Intent(context, CartActivity.class);
+        context.startActivity(intent);
     }
 
     private static class ViewHolder {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ll_parenttView"
+    android:id="@+id/ll_parent_View"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -17,7 +17,7 @@
         android:orientation="horizontal">
 
         <CheckBox
-            android:id="@+id/tv_item_shopcart_clothselect"
+            android:id="@+id/tv_item_shopcart_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -29,7 +29,7 @@
 
 
         <ImageView
-            android:id="@+id/iv_item_shopcart_cloth_pic"
+            android:id="@+id/iv_item_shopcart_pic"
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:src="@mipmap/log_img"
@@ -42,15 +42,12 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_item_shopcart_clothname"
+                android:id="@+id/tv_item_shopcart_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp"
                 android:text="穿秋装情侣字母徽章风衣" />
-
-
-
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -58,25 +55,13 @@
                 android:layout_marginBottom="10dp">
 
                 <TextView
-                    android:id="@+id/tv_shopping_rmb"
+                    android:id="@+id/tv_shopping_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="10dp"
                     android:text="¥185"
                     android:textColor="@color/main_red_text"
                     android:textSize="15sp" />
-
-                <!--<TextView-->
-                    <!--android:id="@+id/tv_goods_points"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginLeft="10dp"-->
-                    <!--android:layout_marginTop="5dp"-->
-                    <!--android:background="@drawable/butt_style_points"-->
-                    <!--android:padding="5dp"-->
-                    <!--android:paddingRight="5dp"-->
-                    <!--android:text="0积分"-->
-                    <!--android:textColor="#95D4FB" />-->
 
                 <!--数量-->
                 <LinearLayout
@@ -91,7 +76,7 @@
                     android:gravity="center_horizontal">
                     <!--减-->
                     <TextView
-                        android:id="@+id/iv_item_shopcart_cloth_minus"
+                        android:id="@+id/iv_item_shopcart_minus"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -106,7 +91,7 @@
                         android:background="#F0EEF4" />
                     <!--数量-->
                     <TextView
-                        android:id="@+id/et_item_shopcart_cloth_num"
+                        android:id="@+id/et_item_shopcart_count"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -120,7 +105,7 @@
                         android:background="#F0EEF4" />
                     <!--加-->
                     <TextView
-                        android:id="@+id/iv_item_shopcart_cloth_add"
+                        android:id="@+id/iv_item_shopcart_add"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -141,12 +126,11 @@
             android:visibility="gone" />
 
         <ImageView
-            android:id="@+id/iv_item_shopcart_cloth_delete"
+            android:id="@+id/iv_item_shopcart_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="20dp"
-            android:src="@drawable/shopcart_delete"
-            android:visibility="gone" />
+            android:src="@drawable/shopcart_delete" />
 
     </LinearLayout>
 

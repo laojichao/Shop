@@ -4,12 +4,14 @@ import android.content.Context;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.glut.shop.R;
 import com.glut.shop.bean.CategoryBean;
+import com.glut.shop.util.ToastUtils;
 
 import java.util.List;
 
@@ -65,5 +67,7 @@ public class ProductSummaryAdapter extends BaseAdapter {
         private TextView tv_name;
         private SimpleDraweeView iv_icon;
     }
+
+
 
 }
