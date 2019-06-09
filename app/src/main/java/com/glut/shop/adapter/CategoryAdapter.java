@@ -14,7 +14,7 @@ import com.glut.shop.util.ToastUtils;
 
 import java.util.List;
 
-public class CategoryAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
+public class CategoryAdapter extends BaseAdapter {
 
     private Context context;
     private List<String> list;
@@ -70,14 +70,7 @@ public class CategoryAdapter extends BaseAdapter implements AdapterView.OnItemCl
         viewHolder.tv_name.setText(list.get(position));
         return view;
     }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        ToastUtils.showToast(context, "点击位置" + position);
-        Intent intent = new Intent(context, CartActivity.class);
-        context.startActivity(intent);
-    }
-
+    
     private static class ViewHolder {
         private TextView tv_name;
     }

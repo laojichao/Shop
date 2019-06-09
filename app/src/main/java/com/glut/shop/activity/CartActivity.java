@@ -11,7 +11,6 @@ import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +20,6 @@ import com.glut.shop.adapter.ShoppingCartAdapter;
 import com.glut.shop.adapter.ShoppingCartAdapter.OnRecyclerViewItemClickListener;
 import com.glut.shop.adapter.ShoppingCartAdapter.OndeleteidClickListener;
 import com.glut.shop.bean.CartInfo;
-import com.glut.shop.bean.GoodsInfo;
 import com.glut.shop.bean.ShoppingBean;
 import com.glut.shop.bean.ShoppingBean.DataBean;
 import com.glut.shop.bean.UpdataButton;
@@ -75,7 +73,6 @@ public class CartActivity extends AppCompatActivity implements OnRecyclerViewIte
     LinearLayout ll_pay;
     @BindView(R.id.empty_view)
     View empty_view;
-    private ShoppingBean shopCartBeans;
     private List<DataBean> data;
     private ShoppingCartAdapter rv_ShopCartAdapter;
     boolean isSelect = false;
@@ -104,19 +101,8 @@ public class CartActivity extends AppCompatActivity implements OnRecyclerViewIte
 //        getShoppingCartData();
         info = mHelper.query("1=1");
         if (info != null) {
-            initData();
+            init();
         }
-/*        try {
-            Thread.sleep(200);
-            if (jsonData != null) {
-                initData();
-            } else {
-                onResume();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }*/
-
     }
 
     @Override
@@ -150,12 +136,8 @@ public class CartActivity extends AppCompatActivity implements OnRecyclerViewIte
         });
     }
 
-
-    /**
-     * 设置数据
-     */
-    private void initData() {
-//        Gson gson = new Gson();
+    private void init() {
+        Gson gson = new Gson();
 //        shopCartBeans = gson.fromJson(jsonData, ShoppingBean.class);
 //        data = null;
 //        data = shopCartBeans.getData();
@@ -189,7 +171,16 @@ public class CartActivity extends AppCompatActivity implements OnRecyclerViewIte
             }
 
         }
-        data = dataBeans;
+        initData(dataBeans);
+    }
+
+
+    /**
+     * 设置数据
+     */
+    private void initData(List<DataBean> bean) {
+//
+        data = bean;
         if (rv_ShopCartAdapter != null) {
             rv_ShopCartAdapter.setDatas(data);
             //通知改变
@@ -206,9 +197,8 @@ public class CartActivity extends AppCompatActivity implements OnRecyclerViewIte
 
     @Override
     public void onItemClick(View view, ShoppingBean.DataBean data) {
-        //对应项被点击,跳转商品详情页
         Log.d(TAG, "onItemClick: ");
-        ToastUtils.showToast(getApplicationContext(), view.getId() + "被点击");
+        ToastUtils.showToast(getApplicationContext(), "店铺页暂时未实现");
 
     }
 
@@ -217,7 +207,19 @@ public class CartActivity extends AppCompatActivity implements OnRecyclerViewIte
     public void messageEventBus(UpdataButton event) {
         //刷新UI
         tv_shopcart_totalprice.setText("￥" + event.getDiscribe());
-        tv_shopcart_totalnum.setText("商品数量" + event.getCount());
+        tv_shopcart_totalnum.setText("商品数量：" + event.getCount() + "（含运费）");
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void messEventBus(DataBean bean) {
+        //刷新UI
+        Log.d(TAG, "messEventBus: ");
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).getStore_name().equals(bean.getStore_name())) {
+                data.remove(i);
+            }
+        }
+        initData(data);
     }
 
     @Override
@@ -271,7 +273,7 @@ public class CartActivity extends AppCompatActivity implements OnRecyclerViewIte
                         ToastUtils.showToast(getApplicationContext(),  "商品被删除了");
                     }
                     dialog.dismiss();
-                    onResume();
+                    init();
                 }
             }
         }).setTitle("你确定要删除吗？").show();

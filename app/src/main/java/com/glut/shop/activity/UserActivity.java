@@ -1,5 +1,6 @@
 package com.glut.shop.activity;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,35 +11,46 @@ import android.webkit.WebView;
 import android.widget.TextView;
 
 import com.glut.shop.R;
+import com.glut.shop.bean.CartInfo;
 import com.glut.shop.bean.GoodsInfo;
+import com.glut.shop.bean.UpdataButton;
+import com.glut.shop.database.CartDBHelper;
 import com.glut.shop.database.GoodDBHelper;
+import com.glut.shop.util.DateUtil;
 import com.glut.shop.util.ToastUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.sql.SQLException;
 
 public class UserActivity extends AppCompatActivity {
     private static final String TAG = "UserActivity";
     private String mFilePath = "file:///android_asset/html/index.html";
-    private GoodsInfo info = new GoodsInfo();
+    private GoodsInfo info ;
     private WebView wv_assets_web;
     String url = "http://www.lyxueit.com/BeiJing.html";
+    private GoodDBHelper mHelper;
+    private CartDBHelper cartDBHelper;
+    private Handler mHandler = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
+        String goods_id = getIntent().getStringExtra("goods_id");
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    info = GoodDBHelper.getDbService().getGoodsById("1001");
-                    Log.d(TAG, "run: " + info.getTitle());
+                    info = GoodDBHelper.getDbService().getGoodsById(goods_id);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
         }).start();
-
 
         // 从布局文件中获取名叫tl_head的工具栏
         Toolbar tl_head = findViewById(R.id.tl_head);
@@ -52,33 +64,38 @@ public class UserActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        TextView tv_web_path = findViewById(R.id.tv_web_path);
-        // 从布局文件中获取名叫wv_assets_web的网页视图
-        WebView wv_assets_web = findViewById(R.id.wv_assets_web);
-//        tv_web_path.setText("下面网页来源于资产文件：" + mFilePath);
-//        wv_assets_web.loadUrl(url);
-        wv_assets_web.getSettings().setJavaScriptEnabled(true);
-        wv_assets_web.loadUrl("http://120.24.61.225:8080/map.html");
-        wv_assets_web.setWebChromeClient(new WebChromeClient());
-        // 命令网页视图加载指定路径的网页
-
-
-        // 给网页视图设置默认的网页浏览客户端
-//        wv_assets_web.setWebViewClient(new WebViewClient());
-        Log.d(TAG, "onCreate: " + info.getTitle());
-        Log.d(TAG, "onCreate: " + info.getId());
     }
+
+
+    private Runnable insertData= new Runnable() {
+        @Override
+        public void run() {
+            CartInfo cartInfo = new CartInfo();
+            cartInfo.setGoods_id(info.getId());
+            cartInfo.setPrice(Float.parseFloat(info.getPrice()));
+            cartInfo.setShop(info.getShop());
+            cartInfo.setTitle(info.getTitle());
+            cartInfo.setPrice(Float.parseFloat(info.getPrice()));
+            cartInfo.setCount(1);
+            cartInfo.setImage(info.getImg().get(0));
+            cartInfo.setUpdate_time(DateUtil.getNowTime());
+            cartDBHelper.insert(cartInfo);
+            ToastUtils.showToast(getApplicationContext(), "插入完成");
+            Log.d(TAG, "run: 插入完成");
+        }
+    };
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume: " + info.getTitle());
-        ToastUtils.showToast(this, info.getTitle());
+        cartDBHelper = CartDBHelper.getInstance(this, 1);
+        cartDBHelper.openReadLink();
+        mHandler.postDelayed(insertData, 3000);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        cartDBHelper.closeLink();
     }
 }

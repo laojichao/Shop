@@ -18,7 +18,6 @@ import com.glut.shop.util.ToastUtils;
 import java.util.List;
 
 public class ProductSummaryAdapter extends BaseAdapter {
-    private static final String TAG = "ProductSummaryAdapter";
     private Context context;
     private List<CategoryBean.DataBean.DataListBean> datas;
 
@@ -48,7 +47,6 @@ public class ProductSummaryAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-        Log.d(TAG, "getView: position" + position);
         CategoryBean.DataBean.DataListBean subcategory = datas.get(position);
         ViewHolder viewHolder = null;
         if (viewHolder == null) {
@@ -64,7 +62,6 @@ public class ProductSummaryAdapter extends BaseAdapter {
         viewHolder.tv_name.setText(subcategory.getTitle());
         Uri uri = Uri.parse(subcategory.getImgURL());
         viewHolder.iv_icon.setImageURI(uri);
-        Log.d(TAG, "getView: position结束" + position);
         return view;
     }
 

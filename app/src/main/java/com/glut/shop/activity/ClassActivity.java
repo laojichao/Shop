@@ -128,7 +128,6 @@ public class ClassActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        Log.d(TAG, "loadData: ");
         CategoryBean categoryBean = JSONObject.parseObject(jsonData, CategoryBean.class);
         showTitle = new ArrayList<>();
         for (int i = 0; i < categoryBean.getData().size(); i++) {
@@ -142,7 +141,6 @@ public class ClassActivity extends AppCompatActivity {
 
         categoryAdapter.notifyDataSetChanged();
         categoryProductAdapter.notifyDataSetChanged();
-        Log.d(TAG, "loadData: ,数据加载完成");
     }
 
     private void getJsonData() {
@@ -166,7 +164,6 @@ public class ClassActivity extends AppCompatActivity {
     public boolean onMenuOpened(int featureId, Menu menu) {
         // 显示菜单项左侧的图标
         MenuUtil.setOverflowIconVisible(featureId, menu);
-        Log.d(TAG, "onMenuOpened: ");
         return super.onMenuOpened(featureId, menu);
     }
 
@@ -174,13 +171,11 @@ public class ClassActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // 从menu_overflow.xml中构建菜单界面布局
         getMenuInflater().inflate(R.menu.menu_overflow, menu);
-        Log.d(TAG, "onCreateOptionsMenu: ");
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(TAG, "onOptionsItemSelected: ");
         int id = item.getItemId();
         if (id == android.R.id.home) { // 点击了工具栏左边的返回箭头
             finish();

@@ -104,6 +104,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                 notifyDataSetChanged();
                 UpdataButton update = new UpdataButton();
                 update.setDiscribe(getAllPrice());
+                update.setCount(getAllCount());
                 EventBus.getDefault().post(update);
             }
         });
@@ -125,6 +126,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         holder.rv_char_view.setFocusableInTouchMode(false);
         holder.rv_char_view.requestFocus();
     }
+
 
     @Override
     public int getItemCount() {
@@ -161,6 +163,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         //发送 消息
         UpdataButton update = new UpdataButton();
         update.setDiscribe(getAllPrice());
+        update.setCount(getAllCount());
         EventBus.getDefault().post(update);
     }
 
@@ -205,17 +208,32 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                 List<ListBean> mdata = data.get(i).getList();
                 for (int j = 0;j < mdata.size(); j++){
                     if(mdata.get(j).isSelect()){
-                        Log.i("单价", "getAllPrice: ----->" + mdata.get(j).getGoods_price()); //价格
+//                        Log.i("单价", "getAllPrice: ----->" + mdata.get(j).getGoods_price()); //价格
                         BigDecimal interestRate = new BigDecimal(mdata.get(j).getGoods_num()); //数量
                         double interest = Arith.mul(mdata.get(j).getGoods_price(), interestRate);
                         allprice = allprice.add(BigDecimal.valueOf(interest));
-
-                        Log.i("总价", allprice + "allprice" + interest + "interestRate" + interestRate); //价格
+//                        Log.i("总价", allprice + "allprice" + interest + "interestRate" + interestRate); //价格
                     }
                 }
             }
         }
         return  allprice.toString();
+    }
+
+    //获取 商品数量
+    public String getAllCount(){
+        int count = 0;
+        if(data != null){
+            for (int i = 0;i < data.size(); i++){
+                List<ListBean> mdata = data.get(i).getList();
+                for (int j = 0;j < mdata.size(); j++){
+                    if(mdata.get(j).isSelect()){
+                        count += mdata.get(j).getGoods_num();
+                    }
+                }
+            }
+        }
+        return  String.valueOf(count);
     }
 
     //获取需要删除的商品id多个商品
@@ -224,7 +242,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         mList = new ArrayList<>();
         if (cartBean != null){
             int size = cartBean.getList().size();
-            Log.d(TAG, "getDeleteID: size=" + size);
+//            Log.d(TAG, "getDeleteID: size=" + size);
             mList.clear();
             for (int i = 0; i < size; i++) {
                 if (cartBean.getList().get(i).isSelect()){
@@ -237,7 +255,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
             }
 
         }
-        Log.d(TAG, "getDeleteID: stringBuffer=" + stringBuffer);
+//        Log.d(TAG, "getDeleteID: stringBuffer=" + stringBuffer);
         return stringBuffer.toString();
     }
 

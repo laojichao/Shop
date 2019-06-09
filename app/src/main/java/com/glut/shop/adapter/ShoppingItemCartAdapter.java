@@ -1,6 +1,7 @@
 package com.glut.shop.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,14 +16,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.glut.shop.R;
-import com.glut.shop.bean.CartInfo;
-import com.glut.shop.bean.ShoppingBean;
+import com.glut.shop.activity.ProductInfoActivity;
 import com.glut.shop.bean.ShoppingBean.DataBean;
 import com.glut.shop.bean.ShoppingBean.DataBean.ListBean;
 import com.glut.shop.adapter.ShoppingItemCartAdapter.MyShoppViewHolder;
 import com.glut.shop.bean.UpdataButton;
 import com.glut.shop.database.CartDBHelper;
-import com.glut.shop.util.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -47,7 +46,6 @@ public class ShoppingItemCartAdapter extends RecyclerView.Adapter<MyShoppViewHol
     private ShoppingCartAdapter rv_ShopCartAdapter;
     private CartDBHelper mHplper;
 
-
     public ShoppingItemCartAdapter(Context context, List<ListBean> listBeans, DataBean bean, ShoppingCartAdapter shopCartAdapter, CartDBHelper cartDBHelper) {
         this.mContext = context;
         this.mDatas = listBeans;
@@ -70,7 +68,10 @@ public class ShoppingItemCartAdapter extends RecyclerView.Adapter<MyShoppViewHol
         String goods_image = mDatas.get(position).getGoods_image();  //图片
         int goods_num = mDatas.get(position).getGoods_num();        //数量
         double goods_price = mDatas.get(position).getGoods_price();  //商品价格
-        holder.tv_item_shopcart_name.setText(goods_name);
+        if (!TextUtils.isEmpty(goods_name)) {
+            holder.tv_item_shopcart_name.setText(goods_name);
+        }
+
         Glide.with(mContext)
                 .load(goods_image)
                 .error(R.mipmap.log_img)
@@ -89,10 +90,10 @@ public class ShoppingItemCartAdapter extends RecyclerView.Adapter<MyShoppViewHol
                     mHplper.update(count, id);
                     if (mOnEditClickListener != null) {
                         mOnEditClickListener.onEditClick(position, mDatas.get(position).getUser_id(), count);
-                        Log.d(TAG, "onClick: ");
                     }
                     UpdataButton updataButton = new UpdataButton();
                     updataButton.setDiscribe(rv_ShopCartAdapter.getAllPrice());
+                    updataButton.setCount(rv_ShopCartAdapter.getAllCount());
                     EventBus.getDefault().post(updataButton);
                     notifyDataSetChanged();
                 }
@@ -109,10 +110,10 @@ public class ShoppingItemCartAdapter extends RecyclerView.Adapter<MyShoppViewHol
                 mHplper.update(count, id);
                 if (mOnEditClickListener != null) {
                     mOnEditClickListener.onEditClick(position, mDatas.get(position).getUser_id(), count);
-                    Log.d(TAG, "onClick: ");
                 }
                 UpdataButton updataButton = new UpdataButton();
                 updataButton.setDiscribe(rv_ShopCartAdapter.getAllPrice());
+                updataButton.setCount(rv_ShopCartAdapter.getAllCount());
                 EventBus.getDefault().post(updataButton);
                 notifyDataSetChanged();
             }
@@ -121,7 +122,6 @@ public class ShoppingItemCartAdapter extends RecyclerView.Adapter<MyShoppViewHol
         holder.iv_item_shopcart_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: 点击了删除的小图片");
                 showDialog(v, position);
             }
         });
@@ -151,6 +151,7 @@ public class ShoppingItemCartAdapter extends RecyclerView.Adapter<MyShoppViewHol
                 }
                 UpdataButton updataButton = new UpdataButton();
                 updataButton.setDiscribe(rv_ShopCartAdapter.getAllPrice());
+                updataButton.setCount(rv_ShopCartAdapter.getAllCount());
                 EventBus.getDefault().post(updataButton);
             }
         });
@@ -161,22 +162,30 @@ public class ShoppingItemCartAdapter extends RecyclerView.Adapter<MyShoppViewHol
             @Override
             public void onClick(View v) {
                 if (position > -1) {
-                    String title = mDatas.get(position).getGoods_name();
-                    ToastUtils.showToast(mContext, title);
-                } 
+                    Intent intent = new Intent(mContext, ProductInfoActivity.class);
+                    intent.putExtra("goods_id", mDatas.get(position).getGoods_id());
+                    mContext.startActivity(intent);
+                }
             }
         });
     }
 
+    //小图片删除
     private void showDialog(final View view, final int position) {
         //调用删除某个规格商品的接口
-        Log.d(TAG, "showDialog: ");
+
         if (mOnDeleteClickListener != null) {
             //删除相应的商品项视图
             Log.d(TAG, "showDialog: 删除");
             mOnDeleteClickListener.onDeleteClick(view, position, mDatas.get(position).getGoods_id());
         }
+        Log.d(TAG, "showDialog: 商品id=" + mDatas.get(position).getGoods_id());
+        mHplper.delete(String.format("goods_id='%s'", mDatas.get(position).getGoods_id()));
         mDatas.remove(position);
+        if (mDatas.size() == 0) {
+            Log.d(TAG, "showDialog: ");
+            EventBus.getDefault().post(bean);//EventBus发送
+        }
         notifyDataSetChanged();
     }
 
@@ -196,11 +205,11 @@ public class ShoppingItemCartAdapter extends RecyclerView.Adapter<MyShoppViewHol
     public interface OnRecyclerViewItemClickListener {
         void onItemClick(View view, ListBean data);
     }
-    public void setmOnEditClickListener(OnEditClickListener listener) {
+    public void setOnEditClickListener(OnEditClickListener listener) {
         this.mOnEditClickListener = listener;
     }
 
-    public void setmOnDeleteClickListener(OnDeleteClickListener listener) {
+    public void setOnDeleteClickListener(OnDeleteClickListener listener) {
         this.mOnDeleteClickListener = listener;
     }
 

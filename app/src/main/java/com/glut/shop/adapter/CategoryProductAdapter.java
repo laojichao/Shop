@@ -65,8 +65,9 @@ public class CategoryProductAdapter extends BaseAdapter {
         viewHolder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                ToastUtils.showToast(context,"点击" + dataList.get(position).getId());
-                context.startActivity(new Intent(context, ProductInfoActivity.class));
+                Intent intent = new Intent(context, ProductInfoActivity.class);
+                intent.putExtra("goods_id", dataList.get(position).getId());
+                context.startActivity(intent);
             }
         });
         return view;

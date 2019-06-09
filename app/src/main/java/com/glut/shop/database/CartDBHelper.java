@@ -117,10 +117,8 @@ public class CartDBHelper extends SQLiteOpenHelper {
         for (CartInfo info : infoArray) {
             Log.d(TAG, "goods_id=" + info.getGoods_id()+ ", count=" + info.getCount());
             // 如果存在相同rowid的记录，则更新记录
-            if (info.getRowid() > 0) {
-                String condition = String.format("rowid='%d'", info.getRowid());
-                update(info, condition);
-                result = info.getRowid();
+            if (queryByGoodsId(info.getGoods_id()) != null) {
+                result = update(info.getCount() + 1, info.getGoods_id());
                 continue;
             }
             // 不存在唯一性重复的记录，则插入新记录

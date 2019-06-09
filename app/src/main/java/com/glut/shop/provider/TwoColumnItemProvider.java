@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.provider.BaseItemProvider;
 import com.glut.shop.activity.ProductInfoActivity;
+import com.glut.shop.activity.UserActivity;
 import com.glut.shop.bean.CategoryBean.DataBean.DataListBean;
 import com.glut.shop.R;
 import com.glut.shop.adapter.HomeAdapter;
@@ -45,7 +46,7 @@ public class TwoColumnItemProvider extends BaseItemProvider<DataListBean, BaseVi
 
     @Override
     public void onClick(BaseViewHolder helper, DataListBean data, int position) {
-        Intent intent = new Intent(mContext, ProductInfoActivity.class);
+        Intent intent = new Intent(mContext, UserActivity.class);
         intent.putExtra("goods_id", data.getId());
         mContext.startActivity(intent);
 //        ToastUtils.showToast(mContext, data.getDesc());
