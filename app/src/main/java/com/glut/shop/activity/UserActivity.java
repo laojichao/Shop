@@ -79,6 +79,7 @@ public class UserActivity extends AppCompatActivity {
             cartInfo.setCount(1);
             cartInfo.setImage(info.getImg().get(0));
             cartInfo.setUpdate_time(DateUtil.getNowTime());
+            cartInfo.setIsSelect(1);
             cartDBHelper.insert(cartInfo);
             ToastUtils.showToast(getApplicationContext(), "插入完成");
             Log.d(TAG, "run: 插入完成");

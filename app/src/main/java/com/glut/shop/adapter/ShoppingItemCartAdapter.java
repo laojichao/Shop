@@ -142,6 +142,7 @@ public class ShoppingItemCartAdapter extends RecyclerView.Adapter<MyShoppViewHol
                         noSelect = true;
                     }
                 }
+                mHplper.updateBySelect(!noSelect ? 1 : 0, mDatas.get(position).getGoods_id());
                 if (!noSelect) {
                     bean.setSelect(!noSelect);
                     rv_ShopCartAdapter.notifyDataSetChanged();
@@ -176,14 +177,14 @@ public class ShoppingItemCartAdapter extends RecyclerView.Adapter<MyShoppViewHol
 
         if (mOnDeleteClickListener != null) {
             //删除相应的商品项视图
-            Log.d(TAG, "showDialog: 删除");
+//            Log.d(TAG, "showDialog: 删除");
             mOnDeleteClickListener.onDeleteClick(view, position, mDatas.get(position).getGoods_id());
         }
-        Log.d(TAG, "showDialog: 商品id=" + mDatas.get(position).getGoods_id());
+//        Log.d(TAG, "showDialog: 商品id=" + mDatas.get(position).getGoods_id());
         mHplper.delete(String.format("goods_id='%s'", mDatas.get(position).getGoods_id()));
         mDatas.remove(position);
         if (mDatas.size() == 0) {
-            Log.d(TAG, "showDialog: ");
+//            Log.d(TAG, "showDialog: ");
             EventBus.getDefault().post(bean);//EventBus发送
         }
         notifyDataSetChanged();

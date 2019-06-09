@@ -151,12 +151,13 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
     }
 
 
-    //设置全选/全不选
+    //设置全选/全不选,更改数据库状态
     public void setAllselect(boolean b){
         for(int i = 0;i < data.size(); i++){
             data.get(i).setSelect(b);
-            for (ShoppingBean.DataBean.ListBean cartItemResultDtoList : data.get(i).getList()){
+            for (ListBean cartItemResultDtoList : data.get(i).getList()){
                 cartItemResultDtoList.setSelect(b);
+                mHelper.updateBySelect(b ? 1 : 0, cartItemResultDtoList.getGoods_id());
             }
         }
         notifyDataSetChanged();

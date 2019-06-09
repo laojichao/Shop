@@ -82,7 +82,8 @@ public class CartDBHelper extends SQLiteOpenHelper {
                 + "goods_id VARCHAR NOT NULL," +"shop VARCHAR,"
                 + "title VARCHAR NOT NULL," + "price FLOAT NOT NULL,"
                 + "count INTEGER NOT NULL," + "image VARCHAR NOT NULL,"
-                + "update_time VARCHAR NOT NULL" + ");";
+                + "update_time VARCHAR NOT NULL," + "is_select Integer NOT NULL"
+                + ");";
         Log.d(TAG, "create_sql:" + create_sql);
         db.execSQL(create_sql);
     }
@@ -117,8 +118,10 @@ public class CartDBHelper extends SQLiteOpenHelper {
         for (CartInfo info : infoArray) {
             Log.d(TAG, "goods_id=" + info.getGoods_id()+ ", count=" + info.getCount());
             // 如果存在相同rowid的记录，则更新记录
-            if (queryByGoodsId(info.getGoods_id()) != null) {
-                result = update(info.getCount() + 1, info.getGoods_id());
+            CartInfo cart = queryByGoodsId(info.getGoods_id());
+            if ( cart != null) {
+                Log.d(TAG, "insert: 数量" + cart.getCount());
+                result = update(cart.getCount() + 1, info.getGoods_id());
                 continue;
             }
             // 不存在唯一性重复的记录，则插入新记录
@@ -130,6 +133,7 @@ public class CartDBHelper extends SQLiteOpenHelper {
             cv.put("count", info.getCount());
             cv.put("image", info.getImage());
             cv.put("update_time", info.getUpdate_time());
+            cv.put("is_select", info.getIsSelect());
             // 执行插入记录动作，该语句返回插入记录的行号
             result = mDB.insert(TABLE_NAME, "", cv);
             // 添加成功后返回行号，失败后返回-1
@@ -150,6 +154,7 @@ public class CartDBHelper extends SQLiteOpenHelper {
         cv.put("count" , info.getCount());
         cv.put("image", info.getImage());
         cv.put("update_time", info.getUpdate_time());
+        cv.put("is_select", info.getIsSelect());
         // 执行更新记录动作，该语句返回记录更新的数目
         return mDB.update(TABLE_NAME, cv, condition, null);
     }
@@ -168,6 +173,20 @@ public class CartDBHelper extends SQLiteOpenHelper {
         return  mDB.update(TABLE_NAME, values,whereClause,whereArgs);
     }
 
+    // 根据goods_id更新商品数
+    public int updateBySelect(Integer select, String goods_id) {
+        Log.d(TAG, "update: 更新选中状态");
+        //实例化内容值
+        ContentValues values = new ContentValues();
+        //在values中添加内容
+        values.put("is_select", select);
+        //修改条件
+        String whereClause = "goods_id=?";
+        //修改添加参数
+        String[] whereArgs={goods_id};
+        return  mDB.update(TABLE_NAME, values,whereClause,whereArgs);
+    }
+
     public int update(CartInfo info) {
         // 执行更新记录动作，该语句返回记录更新的数目
         return update(info, "rowid = " + info.getRowid());
@@ -175,7 +194,7 @@ public class CartDBHelper extends SQLiteOpenHelper {
 
     // 根据指定条件查询记录，并返回结果数据队列
     public ArrayList<CartInfo> query(String condition) {
-        String sql = String.format("select rowid,_id,goods_id,shop,title,price,count,image,update_time" +
+        String sql = String.format("select rowid,_id,goods_id,shop,title,price,count,image,update_time,is_select" +
                 " from %s where %s;", TABLE_NAME, condition);
         Log.d(TAG, "query sql: " + sql);
         ArrayList<CartInfo> infoArray = new ArrayList<CartInfo>();
@@ -193,6 +212,7 @@ public class CartDBHelper extends SQLiteOpenHelper {
             info.setCount(cursor.getInt(6));
             info.setImage(cursor.getString(7));
             info.setUpdate_time(cursor.getString(8));
+            info.setIsSelect(cursor.getInt(9));
             infoArray.add(info);
         }
         cursor.close(); // 查询完毕，关闭游标

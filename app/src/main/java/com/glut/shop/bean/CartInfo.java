@@ -19,6 +19,15 @@ public class CartInfo {
     private int count;
     private String image;
     private String update_time;
+    private int isSelect;
+
+    public int getIsSelect() {
+        return isSelect;
+    }
+
+    public void setIsSelect(int isSelect) {
+        this.isSelect = isSelect;
+    }
 
     public long getRowid() {
         return rowid;

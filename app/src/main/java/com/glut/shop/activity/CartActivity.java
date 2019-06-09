@@ -22,6 +22,7 @@ import com.glut.shop.adapter.ShoppingCartAdapter.OndeleteidClickListener;
 import com.glut.shop.bean.CartInfo;
 import com.glut.shop.bean.ShoppingBean;
 import com.glut.shop.bean.ShoppingBean.DataBean;
+import com.glut.shop.bean.ShoppingBean.DataBean.ListBean;
 import com.glut.shop.bean.UpdataButton;
 import com.glut.shop.database.CartDBHelper;
 import com.glut.shop.http.OkHttpEngine;
@@ -143,13 +144,17 @@ public class CartActivity extends AppCompatActivity implements OnRecyclerViewIte
 //        data = shopCartBeans.getData();
         List<DataBean> dataBeans = new ArrayList<>();            //店铺项列表
         for (int i = 0; i < info.size(); i++) {
-            DataBean.ListBean listBean = new DataBean.ListBean();       //商品项
+            ListBean listBean = new DataBean.ListBean();       //商品项
             listBean.setGoods_name(info.get(i).getTitle());
             listBean.setGoods_price(info.get(i).getPrice());
             listBean.setGoods_num(info.get(i).getCount());
             listBean.setGoods_image(info.get(i).getImage());
             listBean.setGoods_id(info.get(i).getGoods_id());
-
+            boolean isSelect = false;
+            if (info.get(i).getIsSelect() == 1) {
+                isSelect = true;
+            }
+            listBean.setSelect(isSelect);
             List<DataBean.ListBean> listBeans = new ArrayList<>();      //商品项列表
             DataBean dataBean = new DataBean();         //店铺
 
