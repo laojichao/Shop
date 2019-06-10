@@ -46,7 +46,7 @@ public class TwoColumnItemProvider extends BaseItemProvider<DataListBean, BaseVi
 
     @Override
     public void onClick(BaseViewHolder helper, DataListBean data, int position) {
-        Intent intent = new Intent(mContext, UserActivity.class);
+        Intent intent = new Intent(mContext, ProductInfoActivity.class);
         intent.putExtra("goods_id", data.getId());
         mContext.startActivity(intent);
 //        ToastUtils.showToast(mContext, data.getDesc());

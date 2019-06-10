@@ -1,34 +1,30 @@
 package com.glut.shop.bean;
 
-import retrofit2.http.PUT;
-
 /**
- * CartInfo
+ * HistoryInfo
  *
  * @author lao
- * @date 2019/6/7
+ * @date 2019/6/10
  */
-
-public class CartInfo {
-    private long rowid;      //行号
-    private int xuhao;       //列好
-    private String goods_id;     //商品id
-    private String shop;         //店铺名字
-    private String title;        //商品标题
-    private float price;         //价格
-    private int count;
+public class HistoryInfo {
+    private long rowid;
+    private int xuhao;
+    private String user_id;
+    private String goods_id;
+    private String title;
+    private float price;
     private String image;
     private String update_time;
-    private int isSelect;
-    private String user_id;
 
-    public int getIsSelect() {
-        return isSelect;
+    public boolean isSelect() {
+        return select;
     }
 
-    public void setIsSelect(int isSelect) {
-        this.isSelect = isSelect;
+    public void setSelect(boolean select) {
+        this.select = select;
     }
+
+    private boolean select;
 
     public long getRowid() {
         return rowid;
@@ -36,6 +32,10 @@ public class CartInfo {
 
     public void setRowid(long rowid) {
         this.rowid = rowid;
+    }
+
+    public String getUser_id() {
+        return user_id;
     }
 
     public int getXuhao() {
@@ -46,20 +46,16 @@ public class CartInfo {
         this.xuhao = xuhao;
     }
 
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
     public String getGoods_id() {
         return goods_id;
     }
 
     public void setGoods_id(String goods_id) {
         this.goods_id = goods_id;
-    }
-
-    public String getShop() {
-        return shop;
-    }
-
-    public void setShop(String shop) {
-        this.shop = shop;
     }
 
     public String getTitle() {
@@ -78,14 +74,6 @@ public class CartInfo {
         this.price = price;
     }
 
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
     public String getImage() {
         return image;
     }
@@ -102,24 +90,16 @@ public class CartInfo {
         this.update_time = update_time;
     }
 
-    public String getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
-    }
-
-    public CartInfo(){
+    public HistoryInfo() {
         rowid = 0L;
         xuhao = 0;
+        user_id = null;
         goods_id = "";
-        shop = "";
         title = "";
         price = 0f;
-        count = 0;
         image = "";
         update_time = "";
-        user_id = null;
+        select = false;
     }
+
 }

@@ -1,6 +1,7 @@
 package com.glut.shop.database;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -73,7 +74,7 @@ public class CartDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        Log.d(TAG, "onCreate");
+        Log.d(TAG, "onCreate商品数据库");
         String drop_sql = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
         Log.d(TAG, "drop_sql:" + drop_sql);
         db.execSQL(drop_sql);
@@ -82,8 +83,8 @@ public class CartDBHelper extends SQLiteOpenHelper {
                 + "goods_id VARCHAR NOT NULL," +"shop VARCHAR,"
                 + "title VARCHAR NOT NULL," + "price FLOAT NOT NULL,"
                 + "count INTEGER NOT NULL," + "image VARCHAR NOT NULL,"
-                + "update_time VARCHAR NOT NULL," + "is_select Integer NOT NULL"
-                + ");";
+                + "update_time VARCHAR NOT NULL," + "is_select Integer NOT NULL,"
+                + "user_id VARCHAR NOT NULL" + ");";
         Log.d(TAG, "create_sql:" + create_sql);
         db.execSQL(create_sql);
     }
@@ -112,6 +113,38 @@ public class CartDBHelper extends SQLiteOpenHelper {
         return insert(infoArray);
     }
 
+
+    // 往该表添加多条记录
+    public long insertByUser(CartInfo info) {
+        long result = -1;
+            Log.d(TAG, "goods_id=" + info.getGoods_id()+ ", count=" + info.getCount() + ", user_id=" + info.getUser_id());
+            // 如果存在相同rowid的记录，则更新记录
+            CartInfo cart = queryByUserGoods(info.getUser_id(), info.getGoods_id());
+            if ( cart != null) {
+                Log.d(TAG, "insert: 数量" + cart.getCount());
+                result = update(cart.getCount() + 1, info.getGoods_id());
+            } else {
+                ContentValues cv = new ContentValues();
+                cv.put("goods_id", info.getGoods_id());
+                cv.put("shop", info.getShop());
+                cv.put("title", info.getTitle());
+                cv.put("price", info.getPrice());
+                cv.put("count", info.getCount());
+                cv.put("image", info.getImage());
+                cv.put("update_time", info.getUpdate_time());
+                cv.put("is_select", info.getIsSelect());
+                cv.put("user_id", info.getUser_id());
+                // 执行插入记录动作，该语句返回插入记录的行号
+                result = mDB.insert(TABLE_NAME, "", cv);
+                // 添加成功后返回行号，失败后返回-1
+                if (result == -1) {
+                    return result;
+                }
+            }
+            // 不存在唯一性重复的记录，则插入新记录
+        return result;
+    }
+
     // 往该表添加多条记录
     public long insert(ArrayList<CartInfo> infoArray) {
         long result = -1;
@@ -134,6 +167,7 @@ public class CartDBHelper extends SQLiteOpenHelper {
             cv.put("image", info.getImage());
             cv.put("update_time", info.getUpdate_time());
             cv.put("is_select", info.getIsSelect());
+            cv.put("user_id", info.getUser_id());
             // 执行插入记录动作，该语句返回插入记录的行号
             result = mDB.insert(TABLE_NAME, "", cv);
             // 添加成功后返回行号，失败后返回-1
@@ -155,13 +189,14 @@ public class CartDBHelper extends SQLiteOpenHelper {
         cv.put("image", info.getImage());
         cv.put("update_time", info.getUpdate_time());
         cv.put("is_select", info.getIsSelect());
+        cv.put("user_id", info.getUser_id());
         // 执行更新记录动作，该语句返回记录更新的数目
         return mDB.update(TABLE_NAME, cv, condition, null);
     }
 
     // 根据goods_id更新商品数
     public int update(Integer count, String goods_id) {
-        Log.d(TAG, "update: 更新数量");
+        Log.d(TAG, "update: 通过商品id更新数量");
         //实例化内容值
         ContentValues values = new ContentValues();
         //在values中添加内容
@@ -174,8 +209,15 @@ public class CartDBHelper extends SQLiteOpenHelper {
     }
 
     // 根据goods_id更新商品数
+    public void updateByUser(Integer count, String goods_id, String user_id) {
+        Log.d(TAG, "update: 通过商品id和用户id更新数量");
+        String sql = "update " + TABLE_NAME + " set count=" + count + " where goods_id=" + goods_id + " and user_id=" + user_id;
+        mDB.execSQL(sql);
+    }
+
+    // 根据goods_id
     public int updateBySelect(Integer select, String goods_id) {
-        Log.d(TAG, "update: 更新选中状态");
+        Log.d(TAG, "update: 通过goods_id和user_id更新选中状态");
         //实例化内容值
         ContentValues values = new ContentValues();
         //在values中添加内容
@@ -187,14 +229,23 @@ public class CartDBHelper extends SQLiteOpenHelper {
         return  mDB.update(TABLE_NAME, values,whereClause,whereArgs);
     }
 
+    public void updateByUserSelect(Integer select, String goods_id, String user_id) {
+        Log.d(TAG, "update: 通过更新选中状态");
+        //实例化内容值
+        String sql = "update " + TABLE_NAME + " set is_select=" + select + " where goods_id=" + goods_id + " and user_id=" + user_id;
+        mDB.execSQL(sql);
+    }
+
     public int update(CartInfo info) {
         // 执行更新记录动作，该语句返回记录更新的数目
         return update(info, "rowid = " + info.getRowid());
     }
 
+
+
     // 根据指定条件查询记录，并返回结果数据队列
     public ArrayList<CartInfo> query(String condition) {
-        String sql = String.format("select rowid,_id,goods_id,shop,title,price,count,image,update_time,is_select" +
+        String sql = String.format("select rowid,_id,goods_id,shop,title,price,count,image,update_time,is_select,user_id" +
                 " from %s where %s;", TABLE_NAME, condition);
         Log.d(TAG, "query sql: " + sql);
         ArrayList<CartInfo> infoArray = new ArrayList<CartInfo>();
@@ -213,26 +264,37 @@ public class CartDBHelper extends SQLiteOpenHelper {
             info.setImage(cursor.getString(7));
             info.setUpdate_time(cursor.getString(8));
             info.setIsSelect(cursor.getInt(9));
+            info.setUser_id(cursor.getString(10));
+            Log.d(TAG, "query: " + info.getUser_id());
             infoArray.add(info);
         }
         cursor.close(); // 查询完毕，关闭游标
         return infoArray;
     }
 
-    // 根据行号查询指定记录
-    public CartInfo queryById(long rowid) {
-        CartInfo info = null;
-        ArrayList<CartInfo> infoArray = query(String.format("rowid='%d'", rowid));
+    // 根据用户id查询指定记录
+    public ArrayList<CartInfo> queryByUserId(String userid) {
+        ArrayList<CartInfo> infoArray = query(String.format("user_id='%s'", userid));
         if (infoArray.size() > 0) {
-            info = infoArray.get(0);
+            return infoArray;
         }
-        return info;
+        return null;
     }
 
     // 根据商品编号查询指定记录
     public CartInfo queryByGoodsId(String goods_id) {
         CartInfo info = null;
         ArrayList<CartInfo> infoArray = query(String.format("goods_id='%s'", goods_id));
+        if (infoArray.size() > 0) {
+            info = infoArray.get(0);
+        }
+        return info;
+    }
+
+    //查询用户的该商品记录是否为空
+    public CartInfo queryByUserGoods(String userid, String goods_id) {
+        CartInfo info = null;
+        ArrayList<CartInfo> infoArray = query(String.format("user_id='%s' and goods_id='%s'", userid, goods_id));
         if (infoArray.size() > 0) {
             info = infoArray.get(0);
         }

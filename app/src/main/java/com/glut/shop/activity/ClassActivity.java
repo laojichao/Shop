@@ -57,11 +57,6 @@ public class ClassActivity extends AppCompatActivity {
         setContentView(R.layout.activity_class);
 
         Fresco.initialize(this);
-        // 从布局文件中获取名叫tl_head的工具栏
-        Toolbar tl_head = findViewById(R.id.tl_head);
-        tl_head.setTitle("商品分类");
-        // 使用tl_head替换系统自带的ActionBar
-        setSupportActionBar(tl_head);
         initView();
 
         while (jsonData == null) {
@@ -84,13 +79,6 @@ public class ClassActivity extends AppCompatActivity {
 
         categoryProductAdapter = new CategoryProductAdapter(this, categoryProList);
         lv_category_product.setAdapter(categoryProductAdapter);
-
-//        product_summary_LinearLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(ClassActivity.this, ProductInfoActivity.class));
-//            }
-//        });
 
         lv_category.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -128,6 +116,7 @@ public class ClassActivity extends AppCompatActivity {
     }
 
     private void loadData() {
+        Log.d(TAG, "loadData: ");
         CategoryBean categoryBean = JSONObject.parseObject(jsonData, CategoryBean.class);
         showTitle = new ArrayList<>();
         for (int i = 0; i < categoryBean.getData().size(); i++) {
@@ -141,6 +130,7 @@ public class ClassActivity extends AppCompatActivity {
 
         categoryAdapter.notifyDataSetChanged();
         categoryProductAdapter.notifyDataSetChanged();
+        Log.d(TAG, "loadData: ,数据加载完成");
     }
 
     private void getJsonData() {
@@ -160,36 +150,5 @@ public class ClassActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onMenuOpened(int featureId, Menu menu) {
-        // 显示菜单项左侧的图标
-        MenuUtil.setOverflowIconVisible(featureId, menu);
-        return super.onMenuOpened(featureId, menu);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // 从menu_overflow.xml中构建菜单界面布局
-        getMenuInflater().inflate(R.menu.menu_overflow, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) { // 点击了工具栏左边的返回箭头
-            finish();
-        } else if (id == R.id.menu_refresh) { // 点击了刷新图标
-            Toast.makeText(this, "当前刷新时间: " + DateUtil.getNowDateTime("yyyy-MM-dd HH:mm:ss")
-                    , Toast.LENGTH_LONG).show();
-            return true;
-        } else if (id == R.id.menu_about) { // 点击了关于菜单项
-            Toast.makeText(this, "这个是分类页面", Toast.LENGTH_LONG).show();
-            return true;
-        } else if (id == R.id.menu_quit) { // 点击了退出菜单项
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
 }

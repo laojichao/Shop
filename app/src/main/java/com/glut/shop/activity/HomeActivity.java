@@ -44,7 +44,6 @@ import okhttp3.Response;
 @SuppressLint("DefaultLocale")
 public class HomeActivity extends AppCompatActivity {
     private final static String TAG = "HomeActivity";
-    private List<HomeBean> data;
     private int height;
     @BindView(R.id.app_home_list)
     RecyclerView mRecyclerView;

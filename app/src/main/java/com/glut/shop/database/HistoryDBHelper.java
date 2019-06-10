@@ -7,11 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.glut.shop.bean.GoodsInfo;
-import com.glut.shop.util.DBConnection;
+import com.glut.shop.bean.HistoryInfo;
+import com.glut.shop.util.DateUtil;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -21,7 +19,7 @@ import java.util.ArrayList;
  * @date 2019/6/8
  */
 public class HistoryDBHelper extends SQLiteOpenHelper {
-    private static final String TAG = "CartDBHelper";
+    private static final String TAG = "HistoryDBHelper";
     private static final String DB_NAME = "history.db"; // 数据库的名称
     private static final int DB_VERSION = 1; // 数据库的版本号
     private static HistoryDBHelper mHelper = null; // 数据库帮助器的实例
@@ -77,16 +75,16 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        Log.d(TAG, "onCreate");
+        Log.d(TAG, "onCreate历史数据库");
         String drop_sql = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
         Log.d(TAG, "drop_sql:" + drop_sql);
         db.execSQL(drop_sql);
         String create_sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                 + "_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                + "goods_id VARCHAR NOT NULL," +"shop VARCHAR,"
+                + "user_id VARCHAR NOT NULL," + "goods_id VARCHAR NOT NULL,"
                 + "title VARCHAR NOT NULL," + "price FLOAT NOT NULL,"
-                + "count INTEGER NOT NULL," + "image VARCHAR NOT NULL,"
-                + "update_time VARCHAR NOT NULL" + ");";
+                + "image VARCHAR NOT NULL," + "update_time VARCHAR NOT NULL"
+                + ");";
         Log.d(TAG, "create_sql:" + create_sql);
         db.execSQL(create_sql);
     }
@@ -102,96 +100,104 @@ public class HistoryDBHelper extends SQLiteOpenHelper {
         return mDB.delete(TABLE_NAME, condition, null);
     }
 
+
+
     // 删除该表的所有记录
     public int deleteAll() {
         // 执行删除记录动作，该语句返回删除记录的数目
         return mDB.delete(TABLE_NAME, "1=1", null);
 
-//    // 往该表添加一条记录
-//    public long insert(GoodsInfo info) {
-//        ArrayList<GoodsInfo> infoArray = new ArrayList<GoodsInfo>();
-//        infoArray.add(info);
-//        return insert(infoArray);
-//    }
-//
-//    // 往该表添加多条记录
-//    public long insert(ArrayList<GoodsInfo> infoArray) {
-//        long result = -1;
-//        for (GoodsInfo info : infoArray) {
-//            // 如果存在相同rowid的记录，则更新记录
-//            if (info.rowid > 0) {
-//                String condition = String.format("rowid='%d'", info.rowid);
-//                update(info, condition);
-//                result = info.rowid;
-//                continue;
-//            }
-//            // 不存在唯一性重复的记录，则插入新记录
-//            ContentValues cv = new ContentValues();
-//            cv.put("name", info.name);
-//            cv.put("desc", info.desc);
-//            cv.put("price", info.price);
-//            cv.put("thumb_path", info.thumb_path);
-//            cv.put("pic_path", info.pic_path);
-//            // 执行插入记录动作，该语句返回插入记录的行号
-//            result = mDB.insert(TABLE_NAME, "", cv);
-//            // 添加成功后返回行号，失败后返回-1
-//            if (result == -1) {
-//                return result;
-//            }
-//        }
-//        return result;
-//    }
-//
-//    // 根据条件更新指定的表记录
-//    public int update(GoodsInfo info, String condition) {
-//        ContentValues cv = new ContentValues();
-//        cv.put("name", info.name);
-//        cv.put("desc", info.desc);
-//        cv.put("price", info.price);
-//        cv.put("thumb_path", info.thumb_path);
-//        cv.put("pic_path", info.pic_path);
-//        // 执行更新记录动作，该语句返回记录更新的数目
-//        return mDB.update(TABLE_NAME, cv, condition, null);
-//    }
-//
-//    public int update(GoodsInfo info) {
-//        // 执行更新记录动作，该语句返回记录更新的数目
-//        return update(info, "rowid=" + info.rowid);
-//    }
-//
-//    // 根据指定条件查询记录，并返回结果数据队列
-//    public ArrayList<GoodsInfo> query(String condition) {
-//        String sql = String.format("select rowid,_id,name,desc,price,thumb_path,pic_path" +
-//                " from %s where %s;", TABLE_NAME, condition);
-//        Log.d(TAG, "query sql: " + sql);
-//        ArrayList<GoodsInfo> infoArray = new ArrayList<GoodsInfo>();
-//        // 执行记录查询动作，该语句返回结果集的游标
-//        Cursor cursor = mDB.rawQuery(sql, null);
-//        // 循环取出游标指向的每条记录
-//        while (cursor.moveToNext()) {
-//            GoodsInfo info = new GoodsInfo();
-//            info.rowid = cursor.getLong(0);
-//            info.xuhao = cursor.getInt(1);
-//            info.name = cursor.getString(2);
-//            info.desc = cursor.getString(3);
-//            info.price = cursor.getFloat(4);
-//            info.thumb_path = cursor.getString(5);
-//            info.pic_path = cursor.getString(6);
-//            infoArray.add(info);
-//        }
-//        cursor.close(); // 查询完毕，关闭游标
-//        return infoArray;
-//    }
-//
-//    // 根据行号查询指定记录
-//    public GoodsInfo queryById(long rowid) {
-//        GoodsInfo info = null;
-//        ArrayList<GoodsInfo> infoArray = query(String.format("rowid='%d'", rowid));
-//        if (infoArray.size() > 0) {
-//            info = infoArray.get(0);
-//        }
-//        return info;
-//    }
+    }
+    // 往该表添加一条记录
+    public long insert (HistoryInfo info){
+        ArrayList<HistoryInfo> infoArray = new ArrayList<HistoryInfo>();
+        infoArray.add(info);
+        return insert(infoArray);
     }
 
+    // 往该表添加多条记录
+    public long insert (ArrayList<HistoryInfo> infoArray) {
+        Log.d(TAG, "insert: 历史插入");
+        long result = -1;
+        for (HistoryInfo info : infoArray) {
+            // 如果存在相同rowid的记录，则更新记录
+            Log.d(TAG, "insert: 更新时间");
+            if (queryByUserGoods(info) !=null) {
+                String condition = String.format("user_id='%s' and goods_id='%s'", info.getUser_id(), info.getGoods_id());
+                result = update(info, condition);
+                continue;
+            }
+            // 不存在唯一性重复的记录，则插入新记录
+            ContentValues cv = new ContentValues();
+            cv.put("user_id", info.getUser_id());
+            cv.put("goods_id", info.getGoods_id());
+            cv.put("title", info.getTitle());
+            cv.put("price", info.getPrice());
+            cv.put("image", info.getImage());
+            cv.put("update_time", info .getUpdate_time());
+            // 执行插入记录动作，该语句返回插入记录的行号
+            result = mDB.insert(TABLE_NAME, "", cv);
+            // 添加成功后返回行号，失败后返回-1
+            if (result == -1) {
+                return result;
+            }
+        }
+        return result;
+    }
+
+    // 根据条件更新指定的表记录
+    public int update (HistoryInfo info, String condition){
+        ContentValues cv = new ContentValues();
+        cv.put("user_id", info.getUser_id());
+        cv.put("goods_id", info.getGoods_id());
+        cv.put("title", info.getTitle());
+        cv.put("price", info.getPrice());
+        cv.put("image", info.getImage());
+        cv.put("update_time", info.getUpdate_time());
+        // 执行更新记录动作，该语句返回记录更新的数目
+        return mDB.update(TABLE_NAME, cv, condition, null);
+    }
+
+    public int update (HistoryInfo info){
+        // 执行更新记录动作，该语句返回记录更新的数目
+        return update(info, "rowid=" + info.getRowid());
+    }
+
+    // 根据指定条件查询记录，并返回结果数据队列
+    public ArrayList<HistoryInfo> query (String condition){
+        Log.d(TAG, "query: 历史查询");
+        String sql = String.format("select rowid,_id,user_id,goods_id,title,price,image,update_time" +
+                " from %s where %s;", TABLE_NAME, condition);
+        Log.d(TAG, "query sql: " + sql);
+        ArrayList<HistoryInfo> infoArray = new ArrayList<HistoryInfo>();
+        // 执行记录查询动作，该语句返回结果集的游标
+        Cursor cursor = mDB.rawQuery(sql, null);
+        // 循环取出游标指向的每条记录
+        while (cursor.moveToNext()) {
+            HistoryInfo info = new HistoryInfo();
+            info.setRowid(cursor.getLong(0));
+            Log.d(TAG, "query: rowid=" + info.getRowid());
+            info.setXuhao(cursor.getInt(1));
+            info.setUser_id(cursor.getString(2));
+            info.setGoods_id(cursor.getString(3));
+            info.setTitle(cursor.getString(4));
+            info.setPrice(cursor.getFloat(5));
+            info.setImage(cursor.getString(6));
+            info.setUpdate_time(cursor.getString(7));
+            infoArray.add(info);
+        }
+        cursor.close(); // 查询完毕，关闭游标
+        return infoArray;
+    }
+
+    // 根据行号查询指定记录
+    public HistoryInfo queryByUserGoods (HistoryInfo historyInfo){
+        HistoryInfo info = null;
+        ArrayList<HistoryInfo> infoArray = query(String.format("user_id='%s' and goods_id='%s'", historyInfo.getUser_id(), historyInfo.getGoods_id()));
+        if (infoArray.size() > 0) {
+            info = infoArray.get(0);
+        }
+        return info;
+    }
 }
+

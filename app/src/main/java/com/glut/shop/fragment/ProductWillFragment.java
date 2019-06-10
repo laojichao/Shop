@@ -3,6 +3,7 @@ package com.glut.shop.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,14 +73,19 @@ public class ProductWillFragment extends Fragment {
     }
 
     //设置流式布局控件
-    public void setLinearLayoutData(ArrayList<Integer> datas) {
+    public void setLinearLayoutData(ArrayList<String> datas) {
         if (datas != null && datas.size() > 0 && mInflater != null) {
             mLinearLayout.removeAllViews();
-            for (Integer value : datas) {
+            for (String value : datas) {
                 ImageView iv = (ImageView)mInflater.inflate(R.layout.tag_imageview, mLinearLayout, false);
                 iv.setAdjustViewBounds(true);
 
                 //读取数据库商品图片链接,网络图片，之后要修改
+                if (TextUtils.isEmpty(value)) {
+                    iv.setVisibility(View.GONE);
+                } else {
+                    iv.setVisibility(View.VISIBLE);
+                }
                 Picasso.with(getActivity())
                         .load(value)
                         .into(iv);

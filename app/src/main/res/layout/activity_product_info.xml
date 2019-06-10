@@ -91,7 +91,7 @@
                                 android:paddingRight="15dp"
                                 android:paddingStart="15dp"
                                 android:paddingTop="5dp"
-                                android:text="商品标题|商品标题|商品标题|商品标题|商品标题"
+                                android:text="商品标题"
                                 android:textColor="#333333"
                                 android:textSize="18sp"/>
 
@@ -107,23 +107,6 @@
                                 android:paddingLeft="10dp"
                                 android:paddingRight="10dp"
                                 android:paddingStart="10dp"/>
-
-                            <!--商品描述-->
-                            <TextView
-                                android:id="@+id/tv_product_desc"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center|start"
-                                android:ellipsize="end"
-                                android:maxLines="3"
-                                android:paddingBottom="5dp"
-                                android:paddingEnd="15dp"
-                                android:paddingLeft="15dp"
-                                android:paddingRight="15dp"
-                                android:paddingStart="15dp"
-                                android:text="商品描述|商品描述|商品描述|商品描述|商品描述"
-                                android:textColor="#333333"
-                                android:textSize="18sp"/>
 
                         </LinearLayout>
 

@@ -19,6 +19,7 @@ import com.glut.shop.R;
 import com.glut.shop.adapter.ShoppingCartAdapter;
 import com.glut.shop.adapter.ShoppingCartAdapter.OnRecyclerViewItemClickListener;
 import com.glut.shop.adapter.ShoppingCartAdapter.OndeleteidClickListener;
+import com.glut.shop.application.MainApplication;
 import com.glut.shop.bean.CartInfo;
 import com.glut.shop.bean.ShoppingBean;
 import com.glut.shop.bean.ShoppingBean.DataBean;
@@ -44,7 +45,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 /*
-* 
+*
 * 购物车页面
 * 店铺点击监听器
 * 店铺删除监听器
@@ -53,9 +54,7 @@ import okhttp3.Response;
 public class CartActivity extends AppCompatActivity implements OnRecyclerViewItemClickListener,
         OnClickListener, OndeleteidClickListener {
     private static final String TAG = "CartActivity";
-    
-    @BindView(R.id.iv_return)
-    ImageView iv_return;     //返回
+
     @BindView(R.id.rl_mygoods)
     RelativeLayout rl_mygoods;
     @BindView(R.id.rv_shopcart)
@@ -80,7 +79,8 @@ public class CartActivity extends AppCompatActivity implements OnRecyclerViewIte
     private static final String URL = "http://120.24.61.225:8080/atguigu/json/shoppingcart.json";
     private String jsonData = null;
     private CartDBHelper mHelper;
-    private List<CartInfo> info = null;
+    private ArrayList<CartInfo> info = null;
+    private String user_id = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,11 +96,16 @@ public class CartActivity extends AppCompatActivity implements OnRecyclerViewIte
     @Override
     protected void onResume() {
         super.onResume();
+        user_id = MainApplication.getInstance().getUser_id();
         mHelper = CartDBHelper.getInstance(this, 1);
         //打开数据库
         mHelper.openWriteLink();
 //        getShoppingCartData();
-        info = mHelper.query("1=1");
+        if (user_id == null) {
+            ToastUtils.showToast(getApplicationContext(), "用户未登录");
+        } else {
+            info = mHelper.query("user_id=" + user_id);
+        }
         if (info != null) {
             init();
         }
@@ -113,8 +118,6 @@ public class CartActivity extends AppCompatActivity implements OnRecyclerViewIte
     }
 
     private void initListener() {
-        //点击返回监听器
-        iv_return.setOnClickListener(this);
         //全选监听器
         cb_shopcart_allselect.setOnClickListener(this);
         //提交订单监听器
@@ -237,9 +240,6 @@ public class CartActivity extends AppCompatActivity implements OnRecyclerViewIte
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.iv_return: //返回
-                finish();
-                break;
             case R.id.cb_shopcart_allselect: //全选
                 if (isSelect) {
                     cb_shopcart_allselect.setChecked(false);
@@ -258,7 +258,7 @@ public class CartActivity extends AppCompatActivity implements OnRecyclerViewIte
                 break;
         }
     }
- 
+
     /**
      * 删除的点击事件
      *
@@ -274,11 +274,12 @@ public class CartActivity extends AppCompatActivity implements OnRecyclerViewIte
                 if (confirm) {
 //                    mHelper.delete("");
                     for (String id : list) {
-                        mHelper.delete(String.format("goods_id='%s'", id));
+                        mHelper.delete(String.format("goods_id='%s' and user_id='%s'", id, user_id));
                         ToastUtils.showToast(getApplicationContext(),  "商品被删除了");
                     }
                     dialog.dismiss();
                     init();
+                    onResume();
                 }
             }
         }).setTitle("你确定要删除吗？").show();

@@ -98,5 +98,40 @@
         <item name="android:textColor">@color/app_color_tv_def</item>
         <item name="android:textSize">14sp</item>
     </style>
+
+
+    <style name="divider_vertical">
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/divider_color</item>
+    </style>
+
+    <style name="divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/divider_color</item>
+    </style>
+
+    <style name="divider_16dp">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">16dp</item>
+        <item name="android:background">@color/bg_color</item>
+    </style>
+
+    <style name="text_item">
+        <item name="android:background">@color/light_white</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:textColor">@color/text_black</item>
+    </style>
+
+    <style name="text_in_header">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_dark_gray</item>
+    </style>
     
 </resources>

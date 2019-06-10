@@ -1,12 +1,15 @@
 package com.glut.shop.activity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -21,14 +24,20 @@ import android.widget.TextView;
 
 import com.glut.shop.R;
 import com.glut.shop.adapter.VPagerFragmentAdapter;
+import com.glut.shop.application.MainApplication;
+import com.glut.shop.bean.CartInfo;
 import com.glut.shop.bean.GoodsInfo;
+import com.glut.shop.bean.HistoryInfo;
 import com.glut.shop.bean.Specification;
 import com.glut.shop.bean.ViewBundle;
+import com.glut.shop.database.CartDBHelper;
 import com.glut.shop.database.GoodDBHelper;
+import com.glut.shop.database.HistoryDBHelper;
 import com.glut.shop.fragment.GraphicDetailsFragment;
 import com.glut.shop.fragment.ProductEvalInfoFragment;
 import com.glut.shop.fragment.ProductWillFragment;
 import com.glut.shop.util.ClickUtil;
+import com.glut.shop.util.DateUtil;
 import com.glut.shop.util.ToastUtils;
 import com.glut.shop.widget.ChildAutoHeightViewPager;
 import com.glut.shop.widget.FlowLayout;
@@ -43,7 +52,10 @@ import java.util.ArrayList;
 
 public class ProductInfoActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "ProductInfoActivity";
-
+    private CartDBHelper mCartDBHelper;
+    private HistoryDBHelper mHistoryDBHelper;
+    private String user_id  = null;
+    private String goods_id = null;
     /**
      * 顶部tool，工具栏
      */
@@ -53,9 +65,13 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
      * 顶部ViewPager
      * 商品详情轮播图
      */
-    private GeneralVpLayout<Integer> generalVpLayout;
+    private GeneralVpLayout<String> generalVpLayout;
     private LinearLayout mtopViewGroup;
     private ImageView[] mImageViews;
+
+    private TextView tvPrice;   //现价
+    private TextView tvTitle;   //商品标题
+    private TextView tvProductDesc; //商品描述
 
     /**
      * 中间浮动栏（图文详情，商品实拍，评价）
@@ -97,33 +113,43 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
     private int viewPagerTopDistance;   //记录底部ViewPager距离顶部的高度
     private FlowLayout specialOfferFlowLayout, productFeaturesFlowLayout, specificationsChoiceFlowLayout;
 
+    //底部固定栏
+    private ImageView collectIv;
+    private ImageView shoppingCartIv;
+    private TextView addShoppingCartTv;
+
     /**
      * 相关数据
      */
-    private ArrayList<Integer> bannerList;
-    private ArrayList<Integer> detailList;
-    private ArrayList<Integer> willList;
-    private ArrayList<Specification> specificationList;
-    private ArrayList<String> specialOfferList;
-    private ArrayList<String> productFeaturesList;
+    private ArrayList<String> bannerList = null;
+    private ArrayList<String> priceList = null;
+    private ArrayList<String> titleList = null;
+    private ArrayList<String> specialOfferList = null;
+    private ArrayList<String> productFeaturesList = null;
+    private ArrayList<Specification> specificationList = null;
+    private ArrayList<String> detailList = null;
+    private ArrayList<String> willList = null;
     private GoodsInfo info = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_info);
-        String goods_id = getIntent().getStringExtra("goods_id");
+        goods_id = getIntent().getStringExtra("goods_id");
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     info = GoodDBHelper.getDbService().getGoodsById(goods_id);
-                    Log.d(TAG, "run: " + info.getTitle());
+                    Log.d(TAG, "run: " + info.getFeature1() + " " + info.getFeature2());
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
         }).start();
+        while (info == null) {
+            Log.d(TAG,"info == null");
+        }
         initData();
         initView();
         initImg();
@@ -135,17 +161,20 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
         if (bannerList == null) {
             bannerList = new ArrayList<>();
         }
-        for (int i = 0; i < 4; i++) {
-            if (i == 0) {
-                bannerList.add(R.drawable.product_banner_one);
-            } else if (i == 1) {
-                bannerList.add(R.drawable.product_banner_four);
-            } else if (i == 2) {
-                bannerList.add(R.drawable.product_banner_six);
-            } else if (i == 3) {
-                bannerList.add(R.drawable.product_banner_eight);
-            }
+        for (int i = 0; i < info.getImg().size(); i++) {
+            bannerList.add(info.getImg().get(i));
+            Log.d(TAG, info.getImg().get(i));
         }
+        //初始化现价
+        if (priceList == null) {
+            priceList = new ArrayList<>();
+        }
+        priceList.add(info.getPrice());
+        //初始化商品标题
+        if (titleList == null) {
+            titleList = new ArrayList<>();
+        }
+        titleList.add(info.getTitle());
         //初始化优惠
         if (specialOfferList == null) {
             specialOfferList = new ArrayList<>();
@@ -155,8 +184,9 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
         if (specificationList == null) {
             specificationList = new ArrayList<>();
         }
-        for (int i = 0; i < 5; i++) {
-            Specification specification = new Specification(i, "规格" + i, null);
+        for (int i = 0; i < info.getSpec().size(); i++) {
+//            Specification specification = new Specification(i, "规格" + i, null);
+            Specification specification = new Specification(i, info.getSpec().get(i), null);
             specificationList.add(specification);
         }
         //初始化商品特征
@@ -164,21 +194,26 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
             productFeaturesList = new ArrayList<>();
         }
         for (int i = 0; i < 2; i++) {
-            productFeaturesList.add("特征" + i);
+            if (i == 0) {
+                productFeaturesList.add(info.getFeature1());
+            } else if (i == 1) {
+                productFeaturesList.add(info.getFeature2());
+            }
+
         }
         //初始化商品图文详情
         if (detailList == null) {
             detailList = new ArrayList<>();
         }
-        for (int i = 0; i < 6; i++) {
-            detailList.add(R.drawable.test);
+        for (int i = 0; i < info.getImg().size(); i++) {
+            detailList.add(info.getImg().get(i));
         }
         //初始化商品实拍
         if (willList == null) {
             willList = new ArrayList<>();
         }
-        for (int i = 0; i < 6; i++) {
-            willList.add(R.drawable.test);
+        for (int i = 0; i < info.getImg().size(); i++) {
+            willList.add(info.getImg().get(i));
         }
     }
 
@@ -195,9 +230,12 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
         //顶部的ViewPager轮播图
         RelativeLayout headerVpLayout = (RelativeLayout)findViewById(R.id.layout_header_vp);
         if (headerVpLayout != null) {
-            generalVpLayout = (GeneralVpLayout<Integer>)findViewById(R.id.generalVpLayout);
+            generalVpLayout = (GeneralVpLayout<String>)findViewById(R.id.generalVpLayout);
             mtopViewGroup = headerVpLayout.findViewById(R.id.viewGroup);
         }
+        //现价、商品标题、商品描述
+        tvPrice = (TextView)findViewById(R.id.tv_price);
+        tvTitle = (TextView)findViewById(R.id.tv_title);
         //中间浮动栏（图文详情，商品实拍，评价）
         classifyLayout = (LinearLayout)findViewById(R.id.layout_classify);
         classifyLayout.setVisibility(View.INVISIBLE);   //浮动栏初始化时隐藏
@@ -283,6 +321,14 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
         specialOfferFlowLayout = (FlowLayout)findViewById(R.id.flowlayout_special_offer);
         specificationsChoiceFlowLayout = (FlowLayout)findViewById(R.id.flowlayout_specifications_choice);
         productFeaturesFlowLayout = (FlowLayout)findViewById(R.id.flowlayout_product_features);
+
+        //底部固定栏
+        collectIv = (ImageView)findViewById(R.id.img_collect);
+        collectIv.setOnClickListener(this);
+        shoppingCartIv = (ImageView)findViewById(R.id.img_shopping_cart);
+        shoppingCartIv.setOnClickListener(this);
+        addShoppingCartTv = (TextView)findViewById(R.id.btn_add_shopping_cart);
+        addShoppingCartTv.setOnClickListener(this);
     }
 
     private void reflashData() {
@@ -290,6 +336,9 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void run() {
                 setProductTopViewPager(bannerList);
+                setNowPriceData(priceList);
+                setTitleData(titleList);
+
                 setSpecialOfferFlowLayoutData(specialOfferList);
                 setProductFeaturesFlowLayoutData(productFeaturesList);
                 setSpecificationsChoiceFlowLayoutData(specificationList);
@@ -301,14 +350,14 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
                 bottomAdapter.reflashData(mDatas);
                 bottomViewPager.resetHeight(0);
             }
-        }, 2000);
+        }, 1000);
     }
 
     /**
      * 设置商品轮播图
      * @param data
      */
-    private void setProductTopViewPager(ArrayList<Integer> data) {
+    private void setProductTopViewPager(ArrayList<String> data) {
         if (data != null && data.size() > 0) {
             generalVpLayout.setVisibility(View.VISIBLE);
             //初始化指示器
@@ -362,6 +411,26 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
             });
         } else {
             generalVpLayout.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 设置现价
+     * @param data
+     */
+    private void setNowPriceData(ArrayList<String> data) {
+        if (data != null && data.size() > 0) {
+            for (String value : data) {
+                tvPrice.setText(value);
+            }
+        }
+    }
+
+    private void setTitleData(ArrayList<String> data) {
+        if (data != null && data.size() > 0) {
+            for (String value : data) {
+                tvTitle.setText(value);
+            }
         }
     }
 
@@ -447,7 +516,7 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
     }
 
     //自定义Holder
-    private class ImageViewHolder implements Holder<Integer> {
+    private class ImageViewHolder implements Holder<String> {
         private ImageView imageView;
 
         @Override
@@ -457,13 +526,14 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
         }
 
         @Override
-        public void UpdateUI(Context context, int position, Integer imgPath) {
-//            //加载数据，一般为加载url
-//            if (TextUtils.isEmpty(imgPath)) {
-//                imageView.setVisibility(View.GONE);
-//            } else {
-//                imageView.setVisibility(View.VISIBLE);
-//            }
+        public void UpdateUI(Context context, int position, String imgPath) {
+            //加载数据，一般为加载url
+            if (TextUtils.isEmpty(imgPath)) {
+                imageView.setVisibility(View.GONE);
+            } else {
+
+                imageView.setVisibility(View.VISIBLE);
+            }
             imageView.setVisibility(View.VISIBLE);
             Picasso.with(ProductInfoActivity.this)
                     .load(imgPath)
@@ -476,10 +546,10 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_back://返回
-                ToastUtils.showToast(this,"点击了返回");
+                finish();
                 break;
             case R.id.iv_share://分享
-                ToastUtils.showToast(this,"点击了分享");
+                ToastUtils.showToast(this,"分享功能");
                 break;
             case R.id.tv_info_imgtext://图文详情
                 bottomViewPager.setCurrentItem(0);
@@ -492,6 +562,35 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.iv_back_top://返回顶部
                 myScrollView.smoothScrollTo(0, viewPagerTopDistance);
+                break;
+            case R.id.img_collect://收藏
+                ToastUtils.showToast(this,"收藏功能");
+                break;
+            case R.id.img_shopping_cart:
+                startActivity(new Intent(ProductInfoActivity.this, CartActivity.class));
+                finish();
+                break;
+            case R.id.btn_add_shopping_cart:
+                if (user_id!=null) {
+                    CartInfo cartInfo = new CartInfo();
+                    cartInfo.setGoods_id(info.getId());
+                    cartInfo.setPrice(Float.parseFloat(info.getPrice()));
+                    cartInfo.setShop(info.getShop());
+                    cartInfo.setTitle(info.getTitle());
+                    cartInfo.setPrice(Float.parseFloat(info.getPrice()));
+                    cartInfo.setCount(1);
+                    cartInfo.setImage(info.getImg().get(0));
+                    cartInfo.setUpdate_time(DateUtil.getNowDateTime("yyyyMMdd"));
+                    cartInfo.setIsSelect(1);
+                    cartInfo.setUser_id(user_id);
+//                mHepler.insert(cartInfo);
+                    ToastUtils.showToast(getApplicationContext(), "添加商品成功");
+                    mCartDBHelper.insertByUser(cartInfo);
+
+                } else {
+                    ToastUtils.showToast(getApplicationContext(), "请登录账户");
+                }
+
                 break;
         }
     }
@@ -575,4 +674,30 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
         mCurrentIndex = position;
     }
 
+    @Override
+    protected void onPause() {
+        mCartDBHelper.closeLink();
+        mHistoryDBHelper.closeLink();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        user_id = MainApplication.getInstance().getUser_id();
+        mCartDBHelper = CartDBHelper.getInstance(this, 1);
+        mCartDBHelper.openWriteLink();
+        mHistoryDBHelper = HistoryDBHelper.getInstance(this, 1);
+        mHistoryDBHelper.openWriteLink();
+        if (user_id != null) {
+            HistoryInfo historyInfo = new HistoryInfo();
+            historyInfo.setUser_id(user_id);
+            historyInfo.setGoods_id(goods_id);
+            historyInfo.setTitle(info.getTitle());
+            historyInfo.setPrice(Float.parseFloat(info.getPrice()));
+            historyInfo.setImage(info.getImg().get(0));
+            historyInfo.setUpdate_time(DateUtil.getNowDateTime("yyyyMMdd"));
+            mHistoryDBHelper.insert(historyInfo);
+        }
+    }
 }

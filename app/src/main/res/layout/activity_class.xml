@@ -4,13 +4,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/tl_head"
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/light_gray"
-        app:navigationIcon="@mipmap/ic_back">
-    </android.support.v7.widget.Toolbar>
+        android:gravity="center"
+        android:text="商品分类"
+        android:textSize="16sp"
+        android:textColor="#232121"
+        android:background="#FFFFFF"/>
 
     <LinearLayout
         android:layout_width="match_parent"

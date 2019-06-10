@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 
 import com.glut.shop.BuildConfig;
 import com.glut.shop.R;
+import com.glut.shop.application.MainApplication;
 import com.glut.shop.bean.ShoppingBean;
 import com.glut.shop.bean.ShoppingBean.DataBean;
 import com.glut.shop.bean.ShoppingBean.DataBean.ListBean;
@@ -157,7 +158,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
             data.get(i).setSelect(b);
             for (ListBean cartItemResultDtoList : data.get(i).getList()){
                 cartItemResultDtoList.setSelect(b);
-                mHelper.updateBySelect(b ? 1 : 0, cartItemResultDtoList.getGoods_id());
+                mHelper.updateByUserSelect(b ? 1 : 0, cartItemResultDtoList.getGoods_id(), MainApplication.getInstance().getUser_id());
             }
         }
         notifyDataSetChanged();

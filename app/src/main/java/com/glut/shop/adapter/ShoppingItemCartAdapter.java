@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.glut.shop.R;
 import com.glut.shop.activity.ProductInfoActivity;
+import com.glut.shop.application.MainApplication;
 import com.glut.shop.bean.ShoppingBean.DataBean;
 import com.glut.shop.bean.ShoppingBean.DataBean.ListBean;
 import com.glut.shop.adapter.ShoppingItemCartAdapter.MyShoppViewHolder;
@@ -87,7 +88,7 @@ public class ShoppingItemCartAdapter extends RecyclerView.Adapter<MyShoppViewHol
                     int count = mDatas.get(position).getGoods_num() - 1;
                     String id = mDatas.get(position).getGoods_id();
                     mDatas.get(position).setGoods_num(count);
-                    mHplper.update(count, id);
+                    mHplper.updateByUser(count, id, MainApplication.getInstance().getUser_id());
                     if (mOnEditClickListener != null) {
                         mOnEditClickListener.onEditClick(position, mDatas.get(position).getUser_id(), count);
                     }
@@ -107,7 +108,7 @@ public class ShoppingItemCartAdapter extends RecyclerView.Adapter<MyShoppViewHol
                 int count = mDatas.get(position).getGoods_num() + 1;
                 String id = mDatas.get(position).getGoods_id();
                 mDatas.get(position).setGoods_num(count);
-                mHplper.update(count, id);
+                mHplper.updateByUser(count, id, MainApplication.getInstance().getUser_id());
                 if (mOnEditClickListener != null) {
                     mOnEditClickListener.onEditClick(position, mDatas.get(position).getUser_id(), count);
                 }
@@ -142,7 +143,7 @@ public class ShoppingItemCartAdapter extends RecyclerView.Adapter<MyShoppViewHol
                         noSelect = true;
                     }
                 }
-                mHplper.updateBySelect(!noSelect ? 1 : 0, mDatas.get(position).getGoods_id());
+                mHplper.updateByUserSelect(!noSelect ? 1 : 0, mDatas.get(position).getGoods_id(), MainApplication.getInstance().getUser_id());
                 if (!noSelect) {
                     bean.setSelect(!noSelect);
                     rv_ShopCartAdapter.notifyDataSetChanged();
@@ -181,7 +182,7 @@ public class ShoppingItemCartAdapter extends RecyclerView.Adapter<MyShoppViewHol
             mOnDeleteClickListener.onDeleteClick(view, position, mDatas.get(position).getGoods_id());
         }
 //        Log.d(TAG, "showDialog: 商品id=" + mDatas.get(position).getGoods_id());
-        mHplper.delete(String.format("goods_id='%s'", mDatas.get(position).getGoods_id()));
+        mHplper.delete(String.format("goods_id='%s' and user_id='%s'", mDatas.get(position).getGoods_id(), MainApplication.getInstance().getUser_id()));
         mDatas.remove(position);
         if (mDatas.size() == 0) {
 //            Log.d(TAG, "showDialog: ");
