@@ -14,8 +14,8 @@ import static com.glut.shop.util.StaticClass.BMOB_APP_ID;
 public class MainApplication extends Application {
     private static final String TAG = "MainApplication";
 //    private String user_id = "123456"; // 当前用户的id
-    private String user_id = "123"; // 当前用户的id
-//    private String user_id = null; // 当前用户的id
+//    private String user_id = "123"; // 当前用户的id
+    private String user_id = null; // 当前用户的id
     // 声明一个当前应用的静态实例
     private static MainApplication mApp;
     // 声明一个公共的信息映射对象，可当作全局变量使用

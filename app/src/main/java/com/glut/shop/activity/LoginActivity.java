@@ -1,6 +1,7 @@
 package com.glut.shop.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,68 +14,55 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.glut.shop.R;
+import com.glut.shop.application.MainApplication;
 import com.glut.shop.bean.User;
 import com.glut.shop.model.EventModel;
+import com.glut.shop.util.FileUtil;
+import com.glut.shop.util.SharedUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 
-/**
- * 时间 ：  2019/6/6      16:22
- * 创建人：  Ahel
- * 包名：   com.glut.shop.activity
- * 类名：   LoginActivity
- * 功能：    TODO
- * 主要方法：
- */
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    private Toolbar login_head;
 
-    private EditText login_name;
-    private EditText login_password;
+    private EditText et_login_username;
+    private EditText et_login_password;
 
     private Button btn_login;
-    private Button btn_registered;
 
-    private TextView forget_password;
+    private TextView tv_forgotPassword;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
-        login_head = findViewById(R.id.login_head);
-        login_head.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
         initView();
     }
 
     private void initView() {
-        login_name =findViewById(R.id.login_name);
-        login_password = findViewById(R.id.login_password);
+        et_login_username =findViewById(R.id.et_login_username);
+        et_login_password = findViewById(R.id.et_login_password);
+        et_login_username.setText(SharedUtil.getIntance(this).readString("user_id", ""));
+        et_login_password.setText(SharedUtil.getIntance(this).readString("password", ""));
 
         btn_login =findViewById(R.id.btn_login);
-        btn_registered = findViewById(R.id.btn_registered);
 
-        forget_password = findViewById(R.id.forget_password);
+        tv_forgotPassword = findViewById(R.id.tv_forgotPassword);
 
         btn_login.setOnClickListener(this);
-        btn_registered.setOnClickListener(this);
-        forget_password.setOnClickListener(this);
+        tv_forgotPassword.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_login:{
-                String name = login_name.getText().toString().trim();
-                String password = login_password.getText().toString().trim();
+                String name = et_login_username.getText().toString().trim();
+                String password = et_login_password.getText().toString().trim();
+                SharedUtil.getIntance(this).writeString("user_id", name);
+                SharedUtil.getIntance(this).writeString("password", password);
                 if(!TextUtils.isEmpty(name)&!TextUtils.isEmpty(password)){
                     final User user = new User();
                     user.setUsername(name);
@@ -85,6 +73,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             if( e == null ){
                                 if(user.getEmailVerified()){
                                     EventBus.getDefault().post(new EventModel(EventModel.CODE_LOGIN));
+                                    MainApplication.getInstance().setUser_id(user.getUsername());
+                                    EventBus.getDefault().post(user);
                                     finish();
                                 }else {
                                     Toast.makeText(LoginActivity.this,"请前往邮箱验证",Toast.LENGTH_SHORT).show();
@@ -100,13 +90,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             }
 
-            case R.id.btn_registered:{
-                Intent intent = new Intent(LoginActivity.this,RegisteredActivity.class);
-                startActivity(intent);
-                break;
-            }
-
-            case R.id.forget_password:{
+            case R.id.tv_forgotPassword:{
                 Intent intent = new Intent(LoginActivity.this,ForgetActivity.class);
                 startActivity(intent);
                 break;

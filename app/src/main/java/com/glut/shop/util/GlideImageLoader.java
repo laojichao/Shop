@@ -6,10 +6,14 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.youth.banner.loader.ImageLoader;
 
+
 /**
- *
- * Describe:提供Banner图片加载器
+ * GlideImageLoader
+ *  Describe:提供Banner图片加载器
+ * @author lao
+ * @date 2019/6/3
  */
+
 public class GlideImageLoader extends ImageLoader {
     @Override
     public void displayImage(Context context, Object path, ImageView imageView) {

@@ -3,89 +3,227 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
     android:orientation="vertical">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/registered_head"
+
+    <TextView
+        android:id="@+id/tv_register_title"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/blue_light"
-        app:navigationIcon="@drawable/ic_back">
+        android:gravity="center"
+        android:text="注册"
+        android:textSize="16sp"
+        android:textColor="#232121"
+        android:background="#FFFFFF"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:paddingRight="50dp"
-            android:gravity="center"
-            android:text="注册"
-            android:textColor="@color/black"
-            android:textSize="17sp" />
-    </android.support.v7.widget.Toolbar>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/tv_register_title"
+        android:background="@color/gray" />
 
+    <ImageView
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_register_user"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp">
 
-        <EditText
-            android:id="@+id/res_name"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="用户名"/>
-        <EditText
-            android:id="@+id/res_age"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="年龄"/>
-        <EditText
-            android:id="@+id/res_desc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="简介"
-            android:lines="2"/>
+            android:textColorHint="#FF555555"
+            android:theme="@style/EditScreenTextInputLayoutStyle">
 
-        <EditText
-            android:id="@+id/res_pass"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="密码"
-            android:password="true" />
+            <EditText
+                android:id="@+id/et_register_username"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/calibri"
+                android:theme="@style/MyEditText"
+                android:textCursorDrawable="@drawable/cursor_color"
+                android:inputType="text"
+                android:hint="用户名"
+                android:maxLines="1"
+                android:textColor="#FF555555"
+                android:textSize="16sp"/>
 
-        <EditText
-            android:id="@+id/res_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="确认密码"
-            android:password="true" />
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/res_email"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="邮箱" />
+            android:textColorHint="#FF555555"
+            android:theme="@style/EditScreenTextInputLayoutStyle">
 
-        <EditText
-            android:id="@+id/res_phone"
+            <EditText
+                android:id="@+id/et_register_age"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/calibri"
+                android:theme="@style/MyEditText"
+                android:textCursorDrawable="@drawable/cursor_color"
+                android:hint="年龄"
+                android:inputType="number"
+                android:maxLines="1"
+                android:textColor="#FF555555"
+                android:textSize="16sp"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="电话号码" />
+            android:textColorHint="#FF555555"
+            android:theme="@style/EditScreenTextInputLayoutStyle">
+
+            <EditText
+                android:id="@+id/et_register_desc"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/calibri"
+                android:theme="@style/MyEditText"
+                android:textCursorDrawable="@drawable/cursor_color"
+                android:hint="简介"
+                android:inputType="number"
+                android:maxLines="2"
+                android:textColor="#FF555555"
+                android:textSize="16sp"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#FF555555"
+            android:theme="@style/EditScreenTextInputLayoutStyle">
+
+            <EditText
+                android:id="@+id/et_register_password"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/calibri"
+                android:theme="@style/MyEditText"
+                android:textCursorDrawable="@drawable/cursor_color"
+                android:hint="密码"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:textColor="#FF555555"
+                android:textSize="16sp"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#FF555555"
+            android:theme="@style/EditScreenTextInputLayoutStyle">
+
+            <EditText
+                android:id="@+id/et_register_repassword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/calibri"
+                android:theme="@style/MyEditText"
+                android:textCursorDrawable="@drawable/cursor_color"
+                android:hint="确认密码"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:textColor="#FF555555"
+                android:textSize="16sp"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#FF555555"
+            android:theme="@style/EditScreenTextInputLayoutStyle">
+
+            <EditText
+                android:id="@+id/et_register_email"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/calibri"
+                android:theme="@style/MyEditText"
+                android:textCursorDrawable="@drawable/cursor_color"
+                android:hint="邮箱"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:textColor="#FF555555"
+                android:textSize="16sp"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#FF555555"
+            android:theme="@style/EditScreenTextInputLayoutStyle">
+
+            <EditText
+                android:id="@+id/et_register_phone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/calibri"
+                android:theme="@style/MyEditText"
+                android:textCursorDrawable="@drawable/cursor_color"
+                android:hint="电话号码"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:textColor="#FF555555"
+                android:textSize="16sp"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shapewhitebg"
+                android:fontFamily="@font/calibri"
+                android:text="注册"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="#FF555555"
+                android:textSize="16dp"/>
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="注册成功，请往邮箱验证，否则无法登录"
-            android:textColor="@color/colorAccent"
-            android:textSize="15sp"/>
-        <Button
-            android:id="@+id/res_Registered"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/button_bg"
-            android:text="注册"
-            android:textColor="@android:color/white"/>
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/calibri"
+            android:text="注册成功后,请前往邮箱进行验证,否则无法登录!"
+            android:textAlignment="center"
+            android:textColor="@color/love"
+            android:textSize="16sp"/>
+
     </LinearLayout>
 
 </LinearLayout>

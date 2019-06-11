@@ -3,31 +3,35 @@ package com.glut.shop.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.glut.shop.R;
+import com.glut.shop.application.MainApplication;
+import com.glut.shop.bean.User;
 import com.glut.shop.model.EventModel;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import com.glut.shop.util.ToastUtils;
 import com.glut.shop.util.Utils;
-import com.glut.shop.widget.view.MyScrollView;
 
-public class UserActivity extends AppCompatActivity implements View.OnClickListener, MyScrollView.ScrollingListener {
-
-    private Toolbar toolbar;
-    private MyScrollView my_scroll_view;
-    private View divider0;
-    private ImageView iv_back, iv_settings;//返回,设置
-    private TextView tv_title, tv_login;//"个人中心",登录
+public class UserActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String TAG = "UserActivity";
+    private TextView tv_settings;   //设置
+    private TextView tv_login;  //登录
+    private TextView tv_register;   //注册
     private RelativeLayout rl_un_login, rl_login;//未登录和登录后的布局
-    private TextView tv_history;
+    private TextView tv_nickname;
+
+    private LinearLayout linearLayout_history;
+    private LinearLayout linearLayout_collection;
 
     private float alphaHeight = 0;//透明度渐变的高度
 
@@ -35,91 +39,58 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
-
         initViews();
-        initData();
+        initData();     //必须先注册EventBus再初始化ui
 
-        setToolbar();
-        setListeners();
     }
 
     private void initData() {
         alphaHeight = Utils.dip2px(this, 160);
-        tv_title.setVisibility(View.INVISIBLE);//"个人中心"暂时不可见
-
         EventBus.getDefault().register(this);//订阅
     }
 
     private void initViews() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        my_scroll_view = (MyScrollView) findViewById(R.id.my_scroll_view);
-        divider0 = findViewById(R.id.divider0);
-        iv_back = (ImageView) findViewById(R.id.iv_back);
-        iv_settings = (ImageView) findViewById(R.id.iv_settings);
-        tv_title = (TextView) findViewById(R.id.tv_title);
+        linearLayout_history = (LinearLayout)findViewById(R.id.linearLayout_history);
+        linearLayout_history.setOnClickListener(this);
+        linearLayout_collection = (LinearLayout)findViewById(R.id.linearLayout_collection);
+        linearLayout_collection.setOnClickListener(this);
+        tv_settings = (TextView)findViewById(R.id.tv_settings);
+        tv_settings.setOnClickListener(this);
         tv_login = (TextView) findViewById(R.id.tv_login);
+        tv_login.setOnClickListener(this);
+        tv_register = (TextView)findViewById(R.id.tv_register);
+        tv_register.setOnClickListener(this);
         rl_un_login = (RelativeLayout) findViewById(R.id.rl_un_login);
         rl_login = (RelativeLayout) findViewById(R.id.rl_login);
-        tv_history = findViewById(R.id.tv_history);
-    }
-
-    private void setListeners() {
-        iv_back.setOnClickListener(this);
-        iv_settings.setOnClickListener(this);
-        tv_login.setOnClickListener(this);
-        my_scroll_view.setScrollingListener(this);
-        tv_history.setOnClickListener(this);
-    }
-
-    private void setToolbar() {
-        //设置导航图标要在setSupportActionBar方法之后
-        Utils.initToolbar(this, toolbar, "", "", 0, null);
-
-        toolbar.setAlpha(0);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        tv_nickname  = findViewById(R.id.tv_nickname);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.iv_back:
-                onBackPressed();
-                break;
-            case R.id.iv_settings:
-                Intent intent = new Intent(this, ChangeProfileActivity.class);
-                startActivity(intent);
+            case R.id.tv_settings:
+                Intent intentsettings = new Intent(this, ChangeProfileActivity.class);
+                startActivity(intentsettings);
                 break;
             case R.id.tv_login:
-                Intent intent1 = new Intent(this, LoginActivity.class);
-                startActivity(intent1);
-            case R.id.tv_history:
-//                startActivity(new Intent(this, HistoryActivity.class));
-                startActivity(new Intent(this, RecyclerDynamicActivity.class));
+                Intent intentlogin = new Intent(this, LoginActivity.class);
+                startActivity(intentlogin);
+                break;
+            case R.id.tv_register:
+                Intent intentregister = new Intent(this,RegisteredActivity.class);
+                startActivity(intentregister);
+                break;
+            case R.id.linearLayout_history:
+                if (TextUtils.isEmpty(MainApplication.getInstance().getUser_id())) {
+                    ToastUtils.showToast(this, "请登录账户");
+                } else {
+                    startActivity(new Intent(getApplicationContext(), HistoryActivity.class));
+                }
+                break;
+            case R.id.linearLayout_collection:
+                ToastUtils.showToast(this, "我的收藏");
+                break;
         }
-    }
-
-
-    @Override
-    public void onScrolling(int l, int t, int oldl, int oldt) {
-        float alpha = t * 1.0f / alphaHeight;
-        if (alpha < 0.4f) {
-            alpha = 0;
-            if (divider0.getVisibility() == View.VISIBLE) {
-                divider0.setVisibility(View.INVISIBLE);
-                tv_title.setVisibility(View.INVISIBLE);
-            }
-        } else {
-            if (divider0.getVisibility() == View.INVISIBLE) {
-                divider0.setVisibility(View.VISIBLE);
-                tv_title.setVisibility(View.VISIBLE);
-            }
-        }
-        toolbar.setAlpha(alpha);
     }
 
     //ThreadMode共四个:MAIN UI线程 BACKGROUND 后台线程 POSTING 和发布者处在同一个线程 ASYNC 异步线程
@@ -135,6 +106,11 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                 rl_login.setVisibility(View.GONE);
                 break;
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUserEvent(User user) {
+        tv_nickname.setText(user.getUsername());
     }
 
     @Override

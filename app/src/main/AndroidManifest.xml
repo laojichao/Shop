@@ -22,13 +22,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DesignTheme">
-        <activity android:name=".activity.RecyclerDynamicActivity"/>
-        <activity
-            android:name=".activity.ProductInfoActivity"
-            android:theme="@style/AppCompatTheme" />
-        <activity
-            android:name=".activity.UserActivity"
-            android:theme="@style/AppCompatTheme" />
         <activity
             android:name=".activity.LaunchActivity"
             android:theme="@style/AppCompatTheme">
@@ -62,9 +55,17 @@
         <activity
             android:name=".activity.ChangeProfileActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.HistoryActivity"
+            android:theme="@style/AppCompatTheme"/>
+        <activity
+            android:name=".activity.ProductInfoActivity"
+            android:theme="@style/AppCompatTheme" />
+        <activity
+            android:name=".activity.UserActivity"
+            android:theme="@style/AppCompatTheme" />
         <provider
             android:name="cn.bmob.v3.util.BmobContentProvider"
-            android:authorities="com.glut.shop.BmobContentProvider"></provider>
+            android:authorities="com.glut.shop.BmobContentProvider"/>
     </application>
 
 </manifest>

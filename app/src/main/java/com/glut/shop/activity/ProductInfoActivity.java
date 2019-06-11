@@ -130,6 +130,7 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
     private ArrayList<String> detailList = null;
     private ArrayList<String> willList = null;
     private GoodsInfo info = null;
+    private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,20 +142,29 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
             public void run() {
                 try {
                     info = GoodDBHelper.getDbService().getGoodsById(goods_id);
-                    Log.d(TAG, "run: " + info.getFeature1() + " " + info.getFeature2());
+//                    Log.d(TAG, "run: " + info.getFeature1() + " " + info.getFeature2());
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
         }).start();
-        while (info == null) {
-            Log.d(TAG,"info == null");
-        }
-        initData();
-        initView();
-        initImg();
-        reflashData();
+        mHandler.postDelayed(connectDB, 200);
     }
+
+    private Runnable connectDB = new Runnable() {
+        @Override
+        public void run() {
+            if (info != null) {
+                initData();
+                initView();
+                initImg();
+                reflashData();
+            } else {
+                Log.d(TAG, "run: 延迟加载");
+                mHandler.postDelayed(this, 200);
+            }
+        }
+    };
 
     private void initData() {
         //初始化顶部轮播图
@@ -567,11 +577,18 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
                 ToastUtils.showToast(this,"收藏功能");
                 break;
             case R.id.img_shopping_cart:
-                startActivity(new Intent(ProductInfoActivity.this, CartActivity.class));
-                finish();
+                if (!TextUtils.isEmpty(user_id)) {
+                    startActivity(new Intent(ProductInfoActivity.this, CartActivity.class));
+                }  else {
+                    ToastUtils.showToast(getApplicationContext(), "请登录账户");
+                }
                 break;
             case R.id.btn_add_shopping_cart:
-                if (user_id!=null) {
+                //防止连续点击
+                if (ClickUtil.isFastClick()) {
+                    return;
+                }
+                if (!TextUtils.isEmpty(user_id)) {
                     CartInfo cartInfo = new CartInfo();
                     cartInfo.setGoods_id(info.getId());
                     cartInfo.setPrice(Float.parseFloat(info.getPrice()));

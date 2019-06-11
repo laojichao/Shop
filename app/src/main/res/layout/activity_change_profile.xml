@@ -6,35 +6,17 @@
     android:background="@color/white"
     tools:context="com.glut.shop.activity.ChangeProfileActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?actionBarSize">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="修改个人资料"
-            android:textColor="@color/text_black"
-            android:textSize="16sp" />
-    </android.support.v7.widget.Toolbar>
-
-    <View
-        android:id="@+id/divider0"
-        style="@style/divider"
-        android:layout_below="@+id/toolbar" />
-
     <RelativeLayout
         android:id="@+id/rl_change_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/divider0"
+        android:layout_marginTop="50dp"
         android:paddingRight="16dp">
 
         <TextView
             style="@style/text_item"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
             android:text="修改头像" />
 
         <ImageView
@@ -48,32 +30,52 @@
 
     <View
         android:id="@+id/divider1"
-        style="@style/divider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
         android:layout_below="@+id/rl_change_header"
-        android:layout_marginLeft="16dp"/>
+        android:background="@color/gray" />
 
     <TextView
         android:id="@+id/tv_change_nickname"
         style="@style/text_item"
+        android:layout_marginLeft="16dp"
         android:layout_below="@+id/divider1"
         android:text="修改昵称" />
 
     <View
         android:id="@+id/divider2"
-        style="@style/divider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
         android:layout_below="@+id/tv_change_nickname"
-        android:layout_marginLeft="16dp"/>
+        android:background="@color/gray" />
 
     <TextView
         android:id="@+id/tv_un_login"
         style="@style/text_item"
+        android:layout_marginLeft="16dp"
         android:layout_below="@+id/divider2"
         android:text="退出登录" />
 
     <View
-        android:id="@+id/divider3"
-        style="@style/divider"
-        android:layout_below="@+id/tv_login"
-        android:layout_marginLeft="16dp"/>
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/tv_un_login"
+        android:background="@color/gray" />
+
+    <TextView
+        android:id="@+id/tv_change_info"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="修改个人资料"
+        android:textSize="16sp"
+        android:textColor="#232121"
+        android:background="#FFFFFF"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/tv_change_info"
+        android:background="@color/gray" />
 
 </RelativeLayout>

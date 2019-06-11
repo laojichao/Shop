@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -101,13 +102,19 @@ public class CartActivity extends AppCompatActivity implements OnRecyclerViewIte
         //打开数据库
         mHelper.openWriteLink();
 //        getShoppingCartData();
-        if (user_id == null) {
-            ToastUtils.showToast(getApplicationContext(), "用户未登录");
-        } else {
+        Log.d(TAG, "onResume: ");
+        if (!TextUtils.isEmpty(user_id)) {
             info = mHelper.query("user_id=" + user_id);
+        } else {
+            Log.d(TAG, "onResume: 空");
+            info = mHelper.query("user_id is null");
         }
         if (info != null) {
             init();
+            UpdataButton update = new UpdataButton();
+            update.setDiscribe(rv_ShopCartAdapter.getAllPrice());
+            update.setCount(rv_ShopCartAdapter.getAllCount());
+            EventBus.getDefault().post(update);
         }
     }
 
@@ -210,7 +217,12 @@ public class CartActivity extends AppCompatActivity implements OnRecyclerViewIte
 
     }
 
-    //这里用了eventBus来进行实时价格的UI更改。
+    //这里用了
+    //
+    //
+    //
+    //
+    // entBus来进行实时价格的UI更改。
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void messageEventBus(UpdataButton event) {
         //刷新UI
@@ -273,12 +285,13 @@ public class CartActivity extends AppCompatActivity implements OnRecyclerViewIte
             public void onClick(Dialog dialog, boolean confirm) {
                 if (confirm) {
 //                    mHelper.delete("");
-                    for (String id : list) {
-                        mHelper.delete(String.format("goods_id='%s' and user_id='%s'", id, user_id));
-                        ToastUtils.showToast(getApplicationContext(),  "商品被删除了");
+                    for (int i = 0; i < list.size(); i++) {
+                        mHelper.delete(String.format("shop='%s' and user_id='%s'", data.get(i).getStore_name(), user_id));
+                        data.remove(i);
+                        ToastUtils.showToast(getApplicationContext(),  "店铺被删除了");
                     }
+                    initData(data);
                     dialog.dismiss();
-                    init();
                     onResume();
                 }
             }

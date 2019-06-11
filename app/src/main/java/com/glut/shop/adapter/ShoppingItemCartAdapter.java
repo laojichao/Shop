@@ -23,6 +23,7 @@ import com.glut.shop.bean.ShoppingBean.DataBean.ListBean;
 import com.glut.shop.adapter.ShoppingItemCartAdapter.MyShoppViewHolder;
 import com.glut.shop.bean.UpdataButton;
 import com.glut.shop.database.CartDBHelper;
+import com.glut.shop.util.ClickUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -84,6 +85,10 @@ public class ShoppingItemCartAdapter extends RecyclerView.Adapter<MyShoppViewHol
         holder.iv_item_shopcart_minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //防止连续点击
+                if (ClickUtil.isFastClick()) {
+                    return;
+                }
                 if (mDatas.get(position).getGoods_num() > 1) {
                     int count = mDatas.get(position).getGoods_num() - 1;
                     String id = mDatas.get(position).getGoods_id();
@@ -105,6 +110,10 @@ public class ShoppingItemCartAdapter extends RecyclerView.Adapter<MyShoppViewHol
         holder.iv_item_shopcart_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //防止连续点击
+                if (ClickUtil.isFastClick()) {
+                    return;
+                }
                 int count = mDatas.get(position).getGoods_num() + 1;
                 String id = mDatas.get(position).getGoods_id();
                 mDatas.get(position).setGoods_num(count);
@@ -184,10 +193,14 @@ public class ShoppingItemCartAdapter extends RecyclerView.Adapter<MyShoppViewHol
 //        Log.d(TAG, "showDialog: 商品id=" + mDatas.get(position).getGoods_id());
         mHplper.delete(String.format("goods_id='%s' and user_id='%s'", mDatas.get(position).getGoods_id(), MainApplication.getInstance().getUser_id()));
         mDatas.remove(position);
-        if (mDatas.size() == 0) {
+//        if (mDatas.size() == 0) {
 //            Log.d(TAG, "showDialog: ");
-            EventBus.getDefault().post(bean);//EventBus发送
-        }
+        EventBus.getDefault().post(bean);//EventBus发送
+//        }
+        UpdataButton update = new UpdataButton();
+        update.setDiscribe(rv_ShopCartAdapter.getAllPrice());
+        update.setCount(rv_ShopCartAdapter.getAllCount());
+        EventBus.getDefault().post(update);
         notifyDataSetChanged();
     }
 

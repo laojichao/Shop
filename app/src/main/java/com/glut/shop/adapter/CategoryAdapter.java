@@ -61,16 +61,16 @@ public class CategoryAdapter extends BaseAdapter {
         }
 
         if (position == selectItem) {
-            viewHolder.tv_name.setBackgroundColor(context.getResources().getColor(R.color.white));
-            viewHolder.tv_name.setTextColor(context.getResources().getColor(R.color.orange));
+            viewHolder.tv_name.setBackgroundColor(context.getColor(R.color.white));
+            viewHolder.tv_name.setTextColor(context.getColor(R.color.love));
         } else {
-            viewHolder.tv_name.setBackgroundColor(context.getResources().getColor(R.color.white));
-            viewHolder.tv_name.setTextColor(context.getResources().getColor(R.color.black));
+            viewHolder.tv_name.setBackgroundColor(context.getColor(R.color.white));
+            viewHolder.tv_name.setTextColor(context.getColor(R.color.black));
         }
         viewHolder.tv_name.setText(list.get(position));
         return view;
     }
-    
+
     private static class ViewHolder {
         private TextView tv_name;
     }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rl_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.glut.shop.activity.UserActivity">
@@ -10,6 +9,7 @@
         android:id="@+id/my_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
         android:scrollbars="none">
 
         <LinearLayout
@@ -37,8 +37,12 @@
                     <TextView
                         android:id="@+id/tv_register"
                         style="@style/text_in_header"
-                        android:paddingRight="16dp"
-                        android:text="注册" />
+                        android:background="@drawable/shapewhitebg"
+                        android:layout_marginRight="20dp"
+                        android:padding="5dp"
+                        android:text="注册"
+                        android:textSize="18sp"
+                        android:textColor="#99333333"/>
 
                     <View
                         android:id="@+id/divider1"
@@ -46,14 +50,18 @@
                         android:layout_alignBottom="@+id/tv_login"
                         android:layout_alignTop="@+id/tv_register"
                         android:layout_toRightOf="@+id/tv_register"
-                        android:background="@color/text_dark_gray" />
+                        android:background="#99333333" />
 
                     <TextView
                         android:id="@+id/tv_login"
                         style="@style/text_in_header"
+                        android:background="@drawable/shapewhitebg"
                         android:layout_toRightOf="@+id/divider1"
-                        android:paddingLeft="16dp"
-                        android:text="登录" />
+                        android:layout_marginLeft="20dp"
+                        android:padding="5dp"
+                        android:text="登录"
+                        android:textSize="18sp"
+                        android:textColor="#99333333"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -76,7 +84,7 @@
                         android:layout_below="@+id/iv_header"
                         android:layout_centerHorizontal="true"
                         android:paddingTop="18dp"
-                        android:text="铁牌会员" />
+                        android:text="钻石会员" />
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
@@ -88,7 +96,7 @@
                             android:id="@+id/tv_nickname"
                             style="@style/text_in_header"
                             android:layout_centerHorizontal="true"
-                            android:text="Lotte" />
+                            android:text="Alita" />
 
                         <TextView
                             android:id="@+id/tv_vip_club"
@@ -97,7 +105,7 @@
                             android:layout_alignParentRight="true"
                             android:background="@drawable/vip_club_shape"
                             android:gravity="center"
-                            android:text="会员俱乐部 >"
+                            android:text="会员中心 >"
                             android:textColor="@color/light_white"
                             android:textSize="10sp" />
                     </RelativeLayout>
@@ -109,117 +117,248 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
-                android:background="@color/light_white">
+                android:background="@color/white"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="0dp"
+                <RelativeLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="待付款"
-                    android:textColor="@color/text_black" />
+                    android:layout_weight="1">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="待收货"
-                    android:textColor="@color/text_black" />
+                    <ImageView
+                        android:id="@+id/iv_payment"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/ic_payment"/>
 
-                <TextView
-                    android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/tv_payment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@id/iv_payment"
+                        android:text="待付款"
+                        android:textColor="@color/text_black" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="全部订单"
-                    android:textColor="@color/text_black" />
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/iv_wait_goods"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/ic_wait_goods"/>
+
+                    <TextView
+                        android:id="@+id/tv_wait_goods"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@id/iv_wait_goods"
+                        android:text="待收货"
+                        android:textColor="@color/text_black" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/iv_all_orders"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/ic_all_orders"/>
+
+                    <TextView
+                        android:id="@+id/tv_all_orders"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/iv_all_orders"
+                        android:text="全部订单"
+                        android:textColor="@color/text_black" />
+
+                </RelativeLayout>
+
             </LinearLayout>
 
-            <View style="@style/divider_16dp" />
-
-            <TextView
-                android:id="@+id/tv_history"
-                style="@style/text_item"
-                android:text="历史记录" />
+            <View
+                style="@style/divider" />
 
             <View style="@style/divider_16dp" />
 
-            <TextView
-                style="@style/text_item"
-                android:text="我的特卖" />
+            <View
+                style="@style/divider" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout_history"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:background="@color/white">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="8dp"
+                    android:src="@mipmap/ic_history"/>
+
+                <TextView
+                    style="@style/text_item"
+                    android:text="我的足迹" />
+
+            </LinearLayout>
 
             <View
-                style="@style/divider"
-                android:layout_marginLeft="16dp" />
+                style="@style/divider" />
 
-            <TextView
-                style="@style/text_item"
-                android:text="生活小助手" />
+            <LinearLayout
+                android:id="@+id/linearLayout_collection"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:background="@color/white">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="8dp"
+                    android:src="@mipmap/ic_collection"/>
+
+                <TextView
+                    style="@style/text_item"
+                    android:text="我的收藏" />
+
+            </LinearLayout>
 
             <View
-                style="@style/divider"
-                android:layout_marginLeft="16dp" />
+                style="@style/divider" />
 
-            <TextView
-                style="@style/text_item"
-                android:text="会员俱乐部" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:background="@color/white">
 
-            <View style="@style/divider_16dp" />
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="8dp"
+                    android:src="@mipmap/ic_evaluation"/>
 
-            <TextView
-                style="@style/text_item"
-                android:text="账户与安全" />
+                <TextView
+                    style="@style/text_item"
+                    android:text="我的评价" />
+
+            </LinearLayout>
 
             <View
-                style="@style/divider"
-                android:layout_marginLeft="16dp" />
+                style="@style/divider" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:background="@color/white">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="8dp"
+                    android:src="@mipmap/ic_vip"/>
+
+                <TextView
+                    style="@style/text_item"
+                    android:text="会员中心" />
+
+            </LinearLayout>
+
+            <View
+                style="@style/divider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:background="@color/white">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="8dp"
+                    android:src="@mipmap/ic_account_safe"/>
+
+                <TextView
+                    style="@style/text_item"
+                    android:text="账户与安全" />
+
+            </LinearLayout>
+
+            <View
+                style="@style/divider" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:background="@color/white">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="8dp"
+                    android:src="@mipmap/ic_settings"/>
+
+                <TextView
+                    android:id="@+id/tv_settings"
+                    style="@style/text_item"
+                    android:text="设置" />
+
+            </LinearLayout>
+
+            <View
+                style="@style/divider" />
 
         </LinearLayout>
     </com.glut.shop.widget.view.MyScrollView>
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <TextView
+        android:id="@+id/tv_personal_center"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/light_white">
-
-    </android.support.v7.widget.Toolbar>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp">
-
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:src="@mipmap/ic_back" />
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="个人中心"
-            android:textColor="@color/text_black" />
-
-        <ImageView
-            android:id="@+id/iv_settings"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:src="@mipmap/settings" />
-    </RelativeLayout>
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="个人中心"
+        android:textSize="16sp"
+        android:textColor="#232121"
+        android:background="#FFFFFF"/>
 
     <View
-        android:id="@+id/divider0"
-        style="@style/divider"
-        android:layout_below="@+id/toolbar"
-        android:visibility="invisible" />
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray" />
+
 </RelativeLayout>

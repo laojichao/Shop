@@ -19,49 +19,31 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
-/**
- * 时间 ：  2019/6/7      14:15
- * 创建人：  Ahel
- * 包名：   com.glut.shop.activity
- * 类名：   ForgetActivity
- * 功能：    TODO
- * 主要方法：
- */
 public class ForgetActivity extends AppCompatActivity implements View.OnClickListener {
-    private Toolbar forget_head;
-    private Button btn_forget;
-    private EditText forget_name;
-    private EditText forget_password;
+    private static final String TAG = "ForgetActivity";
+    private EditText et_changepassword_username;
+    private EditText et_changepassword_newpassword;
+    private Button btn_changepassword;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_forget);
 
-        init();
+        initView();
     }
 
-    private void init() {
-        btn_forget = findViewById(R.id.btn_forget);
-
-        forget_head = findViewById(R.id.forget_head);
-        forget_head.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        forget_name =findViewById(R.id.forget_name);
-        forget_password =findViewById(R.id.forget_password);
-
-        btn_forget.setOnClickListener(this);
+    private void initView() {
+        et_changepassword_username = (EditText)findViewById(R.id.et_changepassword_username);
+        et_changepassword_newpassword = (EditText)findViewById(R.id.et_changepassword_newpassword);
+        btn_changepassword = (Button)findViewById(R.id.btn_changepassword);
+        btn_changepassword.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.btn_forget:
+            case R.id.btn_changepassword:
                 equal();
                 break;
         }
@@ -69,16 +51,16 @@ public class ForgetActivity extends AppCompatActivity implements View.OnClickLis
 
     private void equal() {
         BmobQuery<User> categoryBmobQuery = new BmobQuery<>();
-        String name = forget_name.getText().toString().trim();
+        String name = et_changepassword_username.getText().toString().trim();
         categoryBmobQuery.addWhereEqualTo("username",name);
         categoryBmobQuery.findObjects(new FindListener<User>() {
             @Override
             public void done(List<User> list, BmobException e) {
                 if (e == null) {
                     if(list.toString()!="[]"){
-                        Toast.makeText(ForgetActivity.this,"查询成功"+list.toString()+"查询成功",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ForgetActivity.this,"修改成功",Toast.LENGTH_SHORT).show();
                     }else {
-                        Toast.makeText(ForgetActivity.this, "没有这个帐号" + list.toString() , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ForgetActivity.this, "没有这个帐号", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Log.e("BMOB", e.toString());

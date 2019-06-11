@@ -11,7 +11,7 @@
     <!--定义一个工具栏风格样式-->
     <style name="AppCompatTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
-    
+
     <style name="TabButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -33,7 +33,7 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@drawable/app_main_bottom_tv_color</item>
     </style>
-    
+
     <style name="TabText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -42,7 +42,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">@drawable/toolbar_text_selector</item>
     </style>
-    
+
     <style name="CustomDateDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>
@@ -101,7 +101,7 @@
 
 
     <style name="divider_vertical">
-        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_width">2dp</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/divider_color</item>
     </style>
@@ -115,15 +115,14 @@
     <style name="divider_16dp">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">16dp</item>
-        <item name="android:background">@color/bg_color</item>
+        <item name="android:background">@color/white</item>
     </style>
 
     <style name="text_item">
-        <item name="android:background">@color/light_white</item>
+        <item name="android:background">@color/white</item>
         <item name="android:layout_height">50dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingLeft">16dp</item>
         <item name="android:textColor">@color/text_black</item>
     </style>
 
@@ -133,5 +132,18 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/text_dark_gray</item>
     </style>
-    
+
+    <style name="MyEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@android:color/darker_gray</item>
+        <item name="colorControlActivated">@color/love</item>
+    </style>
+
+    <style name="EditScreenTextInputLayoutStyle" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorControlNormal">@color/textInputLayout</item>
+        <item name="colorControlActivated">@color/textInputLayout</item>
+        <item name="colorControlHighlight">@color/textInputLayout</item>
+        <item name="colorAccent">@color/textInputLayout</item>
+        <item name="android:textColorHint">@color/textInputLayout</item>
+    </style>
+
 </resources>

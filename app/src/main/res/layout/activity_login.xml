@@ -3,74 +3,119 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/login_head"
+    <TextView
+        android:id="@+id/tv_login_title"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/blue_light"
-        app:navigationIcon="@drawable/ic_back">
+        android:gravity="center"
+        android:text="登录"
+        android:textSize="16sp"
+        android:textColor="#232121"
+        android:background="#FFFFFF"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:paddingRight="50dp"
-            android:gravity="center"
-            android:text="登陆"
-            android:textColor="@color/black"
-            android:textSize="17sp" />
-    </android.support.v7.widget.Toolbar>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/tv_login_title"
+        android:background="@color/gray" />
 
     <ImageView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/app_main_tab_mine_select" />
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_login_user"/>
 
-    <EditText
-        android:id="@+id/login_name"
-        android:hint="用户名"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <EditText
-        android:inputType="textPassword"
-        android:id="@+id/login_password"
-        android:hint="密码"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_marginTop="10dp"
-        android:textColor="@android:color/white"
-        android:background="@drawable/button_bg"
-        android:text="登录"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <Button
-        android:id="@+id/btn_registered"
-        android:layout_marginTop="10dp"
-        android:textColor="@android:color/white"
-        android:background="@drawable/button_bg"
-        android:text="注册"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
     <LinearLayout
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#FF555555"
+            android:theme="@style/EditScreenTextInputLayoutStyle">
+
+            <EditText
+                android:id="@+id/et_login_username"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawablePadding="16dp"
+                android:drawableRight="@drawable/ic_account_box_white_24dp"
+                android:fontFamily="@font/calibri"
+                android:theme="@style/MyEditText"
+                android:textCursorDrawable="@drawable/cursor_color"
+                android:hint="用户名"
+                android:maxLines="1"
+                android:textColor="#FF555555"
+                android:textSize="16sp"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#FF555555"
+            android:theme="@style/EditScreenTextInputLayoutStyle">
+
+            <EditText
+                android:id="@+id/et_login_password"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawablePadding="16dp"
+                android:drawableRight="@drawable/ic_lock_white_24dp"
+                android:fontFamily="@font/calibri"
+                android:theme="@style/MyEditText"
+                android:textCursorDrawable="@drawable/cursor_color"
+                android:hint="密码"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:textColor="#FF555555"
+                android:textSize="16sp"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shapewhitebg"
+                android:fontFamily="@font/calibri"
+                android:text="登录"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textColor="#FF555555"
+                android:textSize="16dp"/>
+
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/forget_password"
-            android:layout_marginRight="10dp"
-            android:layout_gravity="right"
-            android:text="忘记密码?"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_forgotPassword"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAccent"/>
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/calibri"
+            android:text="Forgot Password?"
+            android:textAlignment="center"
+            android:textColor="#FF555555"
+            android:textSize="16sp"/>
 
     </LinearLayout>
 

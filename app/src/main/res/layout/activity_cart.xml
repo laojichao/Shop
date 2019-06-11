@@ -11,14 +11,6 @@
         android:layout_height="50dp"
         android:layout_marginLeft="10dp">
 
-        <!--返回-->
-        <ImageView
-            android:id="@+id/iv_return"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_centerVertical="true"
-            android:contentDescription="TODO" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,7 +18,13 @@
             android:text="我的购物车"
             android:textColor="#232121"
             android:textSize="16dp" />
+
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray" />
 
     <View
         android:layout_width="match_parent"

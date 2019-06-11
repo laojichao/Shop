@@ -3,6 +3,8 @@ package com.glut.shop.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Debug;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -50,22 +52,30 @@ public class ClassActivity extends AppCompatActivity {
     private TextView tv_product_title;
     private LinearLayout product_summary_LinearLayout;
     private String jsonData = null;
+    private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_class);
-
-        Fresco.initialize(this);
         initView();
-
-        while (jsonData == null) {
-            getJsonData();
-        }
-//        getJsonData();
-        loadData();
-
+        Fresco.initialize(this);
+        getJsonData();
+        mHandler.postDelayed(mLoad, 100);
     }
+
+    private Runnable mLoad = new Runnable() {
+        @Override
+        public void run() {
+            if (jsonData != null) {
+                loadData();
+
+            } else {
+                Log.d(TAG, "run: 延迟");
+                mHandler.postDelayed(this ,100);
+            }
+        }
+    };
 
     private void initView() {
         Log.d(TAG, "initView: ");
@@ -106,7 +116,7 @@ public class ClassActivity extends AppCompatActivity {
                 if (currentItem != current && current >= 0) {
                     currentItem = current;
                     tv_product_title.setText(categoryList.get(currentItem));
-                    tv_product_title.setTextColor(getColor(R.color.orange));
+                    tv_product_title.setTextColor(getColor(R.color.love));
                     categoryAdapter.setSelectItem(currentItem);
                     categoryAdapter.notifyDataSetInvalidated();
                 }

@@ -2,8 +2,10 @@ package com.glut.shop.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -36,6 +38,17 @@ public class LaunchActivity extends AppCompatActivity {
     private void check() {
         boolean result = PermissionUtil.checkMultiPermission(LaunchActivity.this, permissions, 0);      //权限检查
         if (result == true) {
+            iv_background.setEnabled(true);
+            mHandler.postDelayed(mLaunch, 2000);
+        } else {
+            Toast.makeText(this, "需要允许相应的权限才能开启应用", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             iv_background.setEnabled(true);
             mHandler.postDelayed(mLaunch, 2000);
         } else {

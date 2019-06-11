@@ -38,7 +38,6 @@ public class LinearDynamicAdapter extends RecyclerView.Adapter<ViewHolder>
 
     // 获取列表项的个数
     public int getItemCount() {
-        Log.d(TAG, "getItemCount: size" + mPublicArray.size());
         return mPublicArray.size();
     }
 

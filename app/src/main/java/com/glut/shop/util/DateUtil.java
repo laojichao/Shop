@@ -6,6 +6,13 @@ import android.text.TextUtils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * DateUtil
+ *
+ * @author lao
+ * @date 2019/6/4
+ */
+
 @SuppressLint("SimpleDateFormat")
 public class DateUtil {
     public static String getNowDateTime(String formatStr) {

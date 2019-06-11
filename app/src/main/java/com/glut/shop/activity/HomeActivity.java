@@ -3,6 +3,7 @@ package com.glut.shop.activity;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -59,30 +60,32 @@ public class HomeActivity extends AppCompatActivity {
     LinearLayout mToolbar;
     private String jsonData = null;
     private String bannerData = null;
+    private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        getJsonData();
+        getBannerData();
+        mHandler.postDelayed(init, 100);
     }
+
+    private Runnable init = new Runnable() {
+        @Override
+        public void run() {
+            if (jsonData != null && bannerData != null) {
+                initView();
+            } else {
+                mHandler.postDelayed(this, 100);
+            }
+        }
+    };
 
     @Override
     protected void onResume() {
         super.onResume();
-                getJsonData();
-                getBannerData();
-                //延时处理
-        try {
-            Thread.sleep(200);
-            if (jsonData != null && bannerData != null) {
-                initView();
-            } else {
-                onResume();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     /*

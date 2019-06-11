@@ -19,7 +19,7 @@ public class GeneralVpAdapter<T> extends PagerAdapter {
     private HolderCreator holderCreator;
 
     public GeneralVpAdapter(HolderCreator holderCreator, List<T> list,
-                             boolean isOpenInfiniteWheel) {
+                            boolean isOpenInfiniteWheel) {
         this.holderCreator = holderCreator;
         this.mDatas = list;
         if (!isOpenInfiniteWheel) {

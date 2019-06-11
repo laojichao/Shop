@@ -6,9 +6,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activity.LaunchActivity">
-    <ImageView
-        android:id="@+id/iv_background"
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"/>
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/iv_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="150dp"
+            android:gravity="center"
+            android:text="Net Shop"
+            android:textSize="30sp"
+            android:fontFamily="@font/calibri"
+            android:textStyle="bold"
+            android:textColor="@color/love"/>
+
+    </FrameLayout>
+
 </LinearLayout>
