@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         et_login_username.setText(SharedUtil.getIntance(this).readString("user_id", ""));
         et_login_password.setText(SharedUtil.getIntance(this).readString("password", ""));
 
+
         btn_login =findViewById(R.id.btn_login);
 
         tv_forgotPassword = findViewById(R.id.tv_forgotPassword);
@@ -54,6 +55,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btn_login.setOnClickListener(this);
         tv_forgotPassword.setOnClickListener(this);
     }
+
 
     @Override
     public void onClick(View v) {

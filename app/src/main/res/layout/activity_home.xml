@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#f2f2f2">
 
     <android.support.v7.widget.RecyclerView
@@ -12,4 +13,19 @@
         android:scrollbars="none" />
 
     <include layout="@layout/app_include_home_title" />
-</FrameLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:scaleType="center"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        app:maxImageSize="50dp"
+        app:layout_anchor="@id/app_home_list"
+        app:layout_anchorGravity="bottom|right"
+        app:backgroundTint="@color/transparent"
+        android:background="@drawable/float_btn"/>
+
+</android.support.design.widget.CoordinatorLayout>

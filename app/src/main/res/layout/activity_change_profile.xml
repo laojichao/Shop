@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="com.glut.shop.activity.ChangeProfileActivity">
+    tools:context=".activity.ChangeProfileActivity">
 
     <RelativeLayout
         android:id="@+id/rl_change_header"

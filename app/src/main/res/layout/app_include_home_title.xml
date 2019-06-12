@@ -50,6 +50,7 @@
             android:paddingStart="18dp"
             android:paddingTop="7dp"
             android:text="商品搜索"
+            android:backgroundTint="#80FFFFFF"
             android:textColor="@color/app_color_main_title_tv"
             android:textSize="14sp"
             tools:ignore="RtlSymmetry" />

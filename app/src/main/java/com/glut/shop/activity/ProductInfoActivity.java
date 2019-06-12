@@ -142,7 +142,7 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
             public void run() {
                 try {
                     info = GoodDBHelper.getDbService().getGoodsById(goods_id);
-//                    Log.d(TAG, "run: " + info.getFeature1() + " " + info.getFeature2());
+                    Log.d(TAG, "run: " + info.getTitle() + " " + info.getFeature2());
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -706,7 +706,7 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
         mCartDBHelper.openWriteLink();
         mHistoryDBHelper = HistoryDBHelper.getInstance(this, 1);
         mHistoryDBHelper.openWriteLink();
-        if (user_id != null) {
+       /* if (user_id != null) {
             HistoryInfo historyInfo = new HistoryInfo();
             historyInfo.setUser_id(user_id);
             historyInfo.setGoods_id(goods_id);
@@ -715,6 +715,26 @@ public class ProductInfoActivity extends AppCompatActivity implements View.OnCli
             historyInfo.setImage(info.getImg().get(0));
             historyInfo.setUpdate_time(DateUtil.getNowDateTime("yyyyMMdd"));
             mHistoryDBHelper.insert(historyInfo);
-        }
+        }*/
+       mHandler.postDelayed(mInsert, 300);
     }
+
+    private Runnable mInsert = new Runnable() {
+        @Override
+        public void run() {
+            if (user_id != null && info != null) {
+                HistoryInfo historyInfo = new HistoryInfo();
+                historyInfo.setUser_id(user_id);
+                historyInfo.setGoods_id(goods_id);
+                historyInfo.setTitle(info.getTitle());
+                historyInfo.setPrice(Float.parseFloat(info.getPrice()));
+                historyInfo.setImage(info.getImg().get(0));
+                historyInfo.setUpdate_time(DateUtil.getNowDateTime("yyyyMMdd"));
+                mHistoryDBHelper.insert(historyInfo);
+            } else {
+                mHandler.postDelayed(this, 100);
+            }
+        }
+    };
 }
+

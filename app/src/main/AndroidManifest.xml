@@ -16,10 +16,9 @@
     <application
         android:name=".application.MainApplication"
         android:allowBackup="true"
-        android:icon="@drawable/shopping_bag"
+        android:icon="@drawable/shop"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DesignTheme">
         <activity
@@ -55,17 +54,19 @@
         <activity
             android:name=".activity.ChangeProfileActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.HistoryActivity"
-            android:theme="@style/AppCompatTheme"/>
+        <activity
+            android:name=".activity.HistoryActivity"
+            android:theme="@style/AppCompatTheme" />
         <activity
             android:name=".activity.ProductInfoActivity"
             android:theme="@style/AppCompatTheme" />
         <activity
             android:name=".activity.UserActivity"
             android:theme="@style/AppCompatTheme" />
+
         <provider
             android:name="cn.bmob.v3.util.BmobContentProvider"
-            android:authorities="com.glut.shop.BmobContentProvider"/>
+            android:authorities="com.glut.shop.BmobContentProvider" />
     </application>
 
 </manifest>

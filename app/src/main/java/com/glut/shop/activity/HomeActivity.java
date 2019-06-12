@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.glut.shop.R;
@@ -23,7 +25,6 @@ import com.glut.shop.bean.BannerBean;
 import com.glut.shop.bean.CategoryBean;
 import com.glut.shop.bean.CategoryBean.DataBean;
 import com.glut.shop.bean.CategoryBean.DataBean.DataListBean;
-import com.glut.shop.bean.HomeBean;
 import com.glut.shop.http.OkHttpEngine;
 import com.glut.shop.util.GlideImageLoader;
 import com.glut.shop.util.ToastUtils;
@@ -37,6 +38,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -45,6 +47,7 @@ import okhttp3.Response;
 @SuppressLint("DefaultLocale")
 public class HomeActivity extends AppCompatActivity {
     private final static String TAG = "HomeActivity";
+
     private int height;
     @BindView(R.id.app_home_list)
     RecyclerView mRecyclerView;
@@ -58,6 +61,8 @@ public class HomeActivity extends AppCompatActivity {
     LinearLayout appHomeTitleLlSearch;
     @BindView(R.id.toolbar)
     LinearLayout mToolbar;
+    @BindView(R.id.fab_btn)
+    FloatingActionButton fab_btn;
     private String jsonData = null;
     private String bannerData = null;
     private Handler mHandler = new Handler();
@@ -67,6 +72,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        mToolbar.setBackgroundResource(R.color.transparent);
         getJsonData();
         getBannerData();
         mHandler.postDelayed(init, 100);
@@ -89,8 +95,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /*
-    * 获取循环视图数据
-    * */
+     * 获取循环视图数据
+     * */
     private void getJsonData() {
         String URL = "http://120.24.61.225:8080/atguigu/json/category.json";
         OkHttpEngine.getInstance(getApplicationContext()).getAsynHttp(URL, new Callback() {
@@ -113,8 +119,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /*
-    * 初始化页面视图
-    * */
+     * 初始化页面视图
+     * */
     private void initView() {
         //网格流循环视图适配器
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 6);
@@ -122,8 +128,8 @@ public class HomeActivity extends AppCompatActivity {
         CategoryBean categoryBean = new Gson().fromJson(jsonData, CategoryBean.class);
         List<DataBean> dataBeans = categoryBean.getData();
         List<DataListBean> dataListBeans = new ArrayList<>();
-        for (int i = 0; i< dataBeans.size(); i++) {
-            for (int j = 0; j < dataBeans.get(i).getDataList().size() ; j++){
+        for (int i = 0; i < dataBeans.size(); i++) {
+            for (int j = 0; j < dataBeans.get(i).getDataList().size(); j++) {
                 dataListBeans.add(dataBeans.get(i).getDataList().get(j));
             }
         }
@@ -153,6 +159,7 @@ public class HomeActivity extends AppCompatActivity {
         //设置滚动监听器
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             private int totalDy = 0;
+
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -171,8 +178,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /*
-    * 获取轮播图
-    * */
+     * 获取轮播图
+     * */
     private void getBannerData() {
         String URL = "http://120.24.61.225:8080/atguigu/json/banner.json";
         OkHttpEngine.getInstance(getApplicationContext()).getAsynHttp(URL, new Callback() {
@@ -190,8 +197,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /*
-    * 设置头部轮播图
-    * */
+     * 设置头部轮播图
+     * */
     private View getHeaderView(RecyclerView v) {
         BannerBean bannerBean = new Gson().fromJson(bannerData, BannerBean.class);
         List<BannerBean.DataBean> list = bannerBean.getData();
@@ -211,7 +218,7 @@ public class HomeActivity extends AppCompatActivity {
         //自定义轮播组件，轮播文本文字
         MarqueeView marqueeView = convertView.findViewById(R.id.app_home_header_problem);
 
-        List<String> problems=new ArrayList<>();
+        List<String> problems = new ArrayList<>();
         problems.add("如何获取更多个人积分");
         problems.add("下单时服务费率规则");
         problems.add("大额预定商品详细交易流程");
@@ -223,5 +230,11 @@ public class HomeActivity extends AppCompatActivity {
         height = bannerParams.height - statusBarHeight - 104;
 
         return convertView;
+    }
+
+    @OnClick(R.id.fab_btn)
+    public void onClick() {
+        Log.d(TAG, "onClick: ");
+        mRecyclerView.scrollToPosition(0);
     }
 }

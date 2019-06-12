@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.glut.shop.R;
 import com.glut.shop.application.MainApplication;
@@ -19,8 +20,12 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import com.glut.shop.util.SharedUtil;
 import com.glut.shop.util.ToastUtils;
 import com.glut.shop.util.Utils;
+
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 
 public class UserActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "UserActivity";
@@ -41,6 +46,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_user);
         initViews();
         initData();     //必须先注册EventBus再初始化ui
+        initLogin();
 
     }
 
@@ -63,6 +69,26 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         rl_un_login = (RelativeLayout) findViewById(R.id.rl_un_login);
         rl_login = (RelativeLayout) findViewById(R.id.rl_login);
         tv_nickname  = findViewById(R.id.tv_nickname);
+    }
+
+    private void initLogin() {
+        String name = SharedUtil.getIntance(this).readString("user_id", "");
+        String password = SharedUtil.getIntance(this).readString("password", "");
+        final User user = new User();
+        user.setUsername(name);
+        user.setPassword(password);
+        user.login(new SaveListener<User>() {
+            @Override
+            public void done(User user, BmobException e) {
+                if( e == null ){
+                    EventBus.getDefault().post(new EventModel(EventModel.CODE_LOGIN));
+                    MainApplication.getInstance().setUser_id(user.getUsername());
+                    EventBus.getDefault().post(user);
+                } else{
+                    Toast.makeText(UserActivity.this,"您已修改密码，请重新登陆！",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     @Override
